@@ -87,7 +87,133 @@ public function getAllUser(Request $request , EntityManagerInterface $entityMana
 }
 
 
+/**
+     * @Route("/deletecliente", methods={"POST"}) 
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function deleteCliente(EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
+        
+        $input  = json_decode(file_get_contents('php://input'), true);             
+        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $input['email']);
+                
+        $entityManager->remove($user);
+        $entityManager->flush();
+        
+        // $data = $serializer->serialize($user, JsonEncoder::FORMAT);
+        return new JsonResponse('Usuario : ' + $input['email'] + 'eliminado', Response::HTTP_OK, [], true); 
 
+    }
+
+    /**
+     * @Route("/deletereserva", methods={"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function deleteCliente(Request $request , EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
+        
+        $id_reserva = $request->query->get('id');
+        // $input  = json_decode(file_get_contents('php://input'), true);             
+        $reserva = $entityManager->getRepository(Reserva::class)->findOneBy(['id' => $id_reserva);
+        // if ($reserva != null){
+        $entityManager->remove($reserva);
+        $entityManager->flush();
+
+        return new JsonResponse('Reserva eliminada', Response::HTTP_OK, [], true);     
+        // $data = $serializer->serialize($user, JsonEncoder::FORMAT);
+    }
+  
+    /**
+     * @Route("/deletepiso", methods={"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function deletePiso(Request $request , EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
+        
+        $id_piso = $request->query->get('id');
+        // $input  = json_decode(file_get_contents('php://input'), true);             
+        $piso = $entityManager->getRepository(Estancia::class)->findOneBy(['id' => $id_piso);
+        // if ($reserva != null){
+        $entityManager->remove($piso);
+        $entityManager->flush();
+
+        return new JsonResponse('Piso eliminado', Response::HTTP_OK, [], true);     
+        // $data = $serializer->serialize($user, JsonEncoder::FORMAT);
+    }
+    
+    /**
+     * @Route("/deletepiso", methods={"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function deletePiso(Request $request , EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
+        
+        $id_piso = $request->query->get('id');
+        // $input  = json_decode(file_get_contents('php://input'), true);             
+        $piso = $entityManager->getRepository(Estancia::class)->findOneBy(['id' => $id_piso);
+        // if ($reserva != null){
+        $entityManager->remove($piso);
+        $entityManager->flush();
+
+        return new JsonResponse('Piso eliminado', Response::HTTP_OK, [], true);     
+        // $data = $serializer->serialize($user, JsonEncoder::FORMAT);
+    }
+
+/**
+     * @Route("/newpiso", methods={"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function editPiso(Request $request , EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
+        
+        $data  = json_decode(file_get_contents('php://input'), true);  
+
+        $piso = new Estancia();
+
+        $piso->setTipoEst($data['tipo']);
+        $piso->setPrecioMes($data['precio-mes']);
+        $piso->setFianza($data['fianza']);
+        $piso->setDireccion($data['direccion']);
+        $piso->setIdCar($data['car']);
+        $piso->setIdReg($data['reglas']);
+        
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return new JsonResponse('Piso creado', Response::HTTP_OK, [], true);     
+        // $data = $serializer->serialize($user, JsonEncoder::FORMAT);
+    }
+
+    
+    /**
+     * @Route("/editpiso", methods={"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function editPiso(Request $request , EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
+        
+        $data  = json_decode(file_get_contents('php://input'), true);  
+
+        $piso = $piso = $entityManager->getRepository(Estancia::class)->findOneBy(['id' => $data['id']);
+
+        $piso->setTipoEst($data['tipo']);
+        $piso->setPrecioMes($data['precio-mes']);
+        $piso->setFianza($data['fianza']);
+        $piso->setDireccion($data['direccion']);
+        $piso->setIdCar($data['car']);
+        $piso->setIdReg($data['reglas']);
+        
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return new JsonResponse('Piso editado', Response::HTTP_OK, [], true);     
+        // $data = $serializer->serialize($user, JsonEncoder::FORMAT);
+    }
 
 }
 
