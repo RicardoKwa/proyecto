@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Prueba Domus</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+    {% block stylesheets %}
+        <link href="{{ asset('css/default.css') }}" rel="stylesheet" type="text/css"/>
+    {% endblock %}    
+
+    <script
+      src="https://maps.googleapis.com/maps/api/js"
+    ></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- INPUT MASK-->
+   <script type="text/javascript" src="https://d3a39i8rhcsf8w.cloudfront.net/js/jquery.mask.min.js"></script>
+</head>
+
+<body>
+
+<div class="loading-container" hidden>
+  <div class="item"></div>
+  <div class="item"></div>
+  <div class="item"></div>
+  <div class="item"></div>
+</div>
+    <header>
+
+        <img id="imgLogo" src="{{ asset('images/proyecto/logo/LogoDomus.jpg') }}" alt="Symfony!" />
+
+        <!-- INICIO MENU -->
+
+       {# <ul class="list unstyled">
+  <li><a href="#" onclick="Alert.success('Success! This alert box indicates a successful or positive action. ','Success',{displayDuration: 3000, pos: 'top'})">Success Alert</a></li>
+  
+  <li><a href="#" onclick="Alert.info('Info! This alert box indicates a neutral informative change or action. ','Info',{displayDuration: 3000})">Info Alert</a></li>
+  
+  <li><a href="#" onclick="Alert.error('error! This alert box indicates a dangerous or potentially negative action. ','Error',{displayDuration: 3000})">Error Alert</a></li>
+  
+  <li><a href="#" onclick="Alert.warning('Warning! This alert box indicates a warning that might need attention.','Warning',{displayDuration: 3000})">Warning Alert</a></li>
+  
+<li><a href="#" onclick="Alert.trash('Delete! This alert box indicates a dangerous or potentially negative action. ','Delete',{displayDuration: 3000})">Delete Alert</a></li>
+  
+  <li> <br><br><br> </li>
+  <!--<li id="test"> Demo </li>-->
+</ul> #}
+
+        
+        <ol id="menu">
+            <li><a href="">Nosotros</a></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Contacto</a></li>
+            <li id="li-user"><a href="#">Mis Reservas</a></li>
+            {# <li id="li-admin"><a href="#">Administración</a>
+                <ul>
+                    <li><a href="#">Clientes</li></a>
+                    <li><a href="#">Reservas</li></a>
+                    <li><a href="#">Pisos</li></a>
+                </ul>            
+                </li> #}
+            <nav id="menu-admin">
+            <button id="admin-btn">Administración</button>
+            <ul>
+                <li><a href="#">Clientes</a></li>
+                <li><a href="#">Reservas</a></li>
+                <li><a href="#">Pisos</a></li>
+            </ul>
+            </nav>
+        </ol>
+
+        <div id="Login">              
+            <button id="btForm"><div><i class="fas fa-user"></i></div><p>Entrar</p></button>
+            <button id="btExit"><div><i class="fas fa-user"></i></div><p>Salir</p></button>
+        </div>
+    
+    </header>
+    <div id="fondo">
+    
+        <div id="buscador">
+            <div id="bus1">
+                {# <h10>Provincia</h10> #}
+                <select name="Provincia" id="Provincia">
+                  
+                       <option value="Madrid">Madrid</option>
+                       <option value="Barcelona">Barcelona</option>
+                       <option value="Sevilla">Sevilla</option>
+                       <option value="Valencia">Valencia</option>
+                       <option value="Bilbao">Bilbao</option>
+                       <option value="Mallorca">Mallorca</option>
+                                     
+                  </select>
+                {# <h11>Tipo de alquiler</h11> #}
+                <select name="Alquiler" id="Alquiler">
+                   
+                       <option value="Completo">Completo</option>
+                       <option value="Habitaciones">Por Habitaciones</option>
+                      
+                   
+                </select>
+                <button id="busca">Buscar</button>
+            </div>
+        </div>
+    </div>
+
+    <h1 id="textSlide">La tranquilidad de acertar, tu nueva vivienda a un click</h1>
+<!-- INICIO FORM PADRE -->
+    <form method="POST" id="form">
+
+   
+
+        <!-- INICIO FORM LOGIN -->
+        <div class="form">
+
+
+            <h1 id="h1Login">Login</h1>
+
+            <input type="email" name="email" id="Email-log">
+            <span class="barra"></span>
+            <label for="">Correo Electrónico</label>
+
+
+            <input type="password" name="contraseña" id="Password-log" maxlength="15">
+            <span class="barra"></span>
+            <label for="">Contraseña</label>
+
+            <div id="Botones">
+                <button type="submit" id="SubmitL">Entrar</button> &nbsp;
+            </div>
+
+            <br>
+            <div class="barra_separadora"></div>
+            <!-- INICIO FORM REGISTRO -->
+            <h5>Registro</h5>
+            <input type="email" name="email" id="EmailR">
+            <span class="barra"></span>
+            <label for="">Correo Electrónico</label>
+
+            <input type="text" name="nombre" id="Name">
+            <span class="barra"></span>
+            <label for="">Nombre</label>
+
+            <input type="text" name="Primer apellido" id="FSurname">
+            <span class="barra"></span>
+            <label for="">Primer Apellido</label>
+
+            <input type="text" name="Segundo Apellido" id="SSurname">
+            <span class="barra"></span>
+            <label for="">Segundo Apellido</label>
+
+            <input type="password" name="contraseña" id="Password" maxlength="15">
+            <span class="barra"></span>
+            <label for="">Contraseña</label>
+
+            <input type="password" name="contraseña" id="Rpassword" maxlength="15">
+            <span class="barra"></span>
+            <label for="">Repite la contraseña</label>
+
+            <br>
+
+            <div id="Botones">
+                <button type="submit" id="SubmitR">Registrarme</button>
+            </div>
+        </div>
+        <br>
+    </form>
+
+<div id = "swiper-wrap">
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <img src="{{ asset('images/proyecto/tarjetas/Madrid.svg') }}" alt="Symfony!" />
+            </div>
+            <div class="swiper-slide">
+                <img src="{{ asset('images/proyecto/tarjetas/Barcelona.svg') }}" alt="Symfony!" />
+            </div>
+            <div class="swiper-slide">
+                <img src="{{ asset('images/proyecto/tarjetas/Valencia.svg') }}" alt="Symfony!" />
+            </div>
+            <div class="swiper-slide">
+                <img src="{{ asset('images/proyecto/tarjetas/Sevilla.svg') }}" alt="Symfony!" />
+            </div>
+            <div class="swiper-slide">
+                <img src="{{ asset('images/proyecto/tarjetas/Bilbao.svg') }}" alt="Symfony!" />
+            </div>
+            <div class="swiper-slide">
+                <img src="{{ asset('images/proyecto/tarjetas/Mallorca.svg') }}" alt="Symfony!" />
+            </div>
+
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        {# <div class="swiper-pagination"></div> #}
+    </div>
+
+    
+</div>
+
+<section id="zonaInfo">
+
+<div id="info">
+    
+
+        <!-- <img src="PROYECTO DOMUS/IMG/FONDO/Imagenprin.jpg" width="100%" height="100%"> -->
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide prueba"><img src="" alt="Symfony!" /></div>
+                <div class="swiper-slide prueba"><img src="" alt="Symfony!" /></div>
+                <div class="swiper-slide prueba"><img src="" alt="Symfony!" /></div>
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+
+        <!-- Swiper JS -->
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+        <!-- Initialize Swiper -->
+        <script>
+            var swiper = new Swiper(".mySwiper", {
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                },
+            });
+        </script>
+
+
+        <div id="info-2">
+        </div>
+    
+
+        
+</div>
+
+<div id="infoRight">
+        </div>
+
+</section>    
+
+
+<div id="zonaPisos"></div>
+
+
+<section id="formReserva">
+    <form id="stepByStepForm" class="form2">
+   <ul class="progress-bar">
+      <li class="progress-bar__dot full"></li>
+      <li class="progress-bar__connector"></li>
+      <li class="progress-bar__dot"></li>
+      <li class="progress-bar__connector"></li>
+      <li class="progress-bar__dot"></li>
+   </ul>
+
+   <div class="step step1">
+      <div class="input-group">
+         <label for="firstname">Fechas</label>
+         <input type="text" id="dateIni" placeholder="Inicio"  required>
+      </div>
+      <div class="input-group">
+         <input type="text" id="dateFin" placeholder="Fin" required>
+         {# <input type="text" placeholder="Smith" name="lastname" id="lastname"> #}
+      </div>
+   </div>
+
+    {# pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" #}
+   <div class="step step2 hidden">
+      {# <div id = "payData"> #}
+            <div class="input-group">
+            <label for="data payment">Pago</label>
+         {# <label for="firstname">Número de tarjeta</label> #}
+        {# <input id="numero-tarjeta" type="text" data-format="****-****-****-****" data-mask="####-####-####-####"> #}
+        <input id="numero-tarjeta" name="tarjeta" type="text"placeholder="Numero de Tarjeta">
+      </div>
+
+            <div class="input-group">
+            {# <label for="cc-number" class="text-xs tracking-wide uppercase font-semibold">Caducidad</label> #}
+              <div id ="double-input">
+              {# <input type="text" data-format="**/**" data-mask="MM/YY">
+              <input type="text" data-format="***" data-mask="###"> #}
+              <input type="text" id ="caducidad-tarjeta" name="caducidad-tarjeta" placeholder = "Caducidad MM/YY">
+              <input type="text" name="cvc" placeholder = "CVC">
+              </div>           
+            </div>
+   </div>
+
+   <div class="step step3 hidden">
+      {# <div class="input-group">
+         <label for="address">Address</label>
+         <input type="text" placeholder="221B Baker Street" name="address" id="address">
+      </div>  #}
+      <div class="input-group">
+      <label for="contact">Contacto</label>
+         {# <label for="phone">Teléfono</label> #}
+         <input type="text" name="phone" id="phone-res" placeholder="Teléfono">
+      </div>
+   </div>
+
+   <div class="button-group">
+   <button id="btDisponible" class="button" >
+         Comprobar Disponibilidad
+      </button>
+      <button id="previous" class="hidden disabled button" disabled>
+         previous
+      </button>
+      <button id="next" class="hidden button">
+         next
+      </button>
+   </div>
+   <div class="button-group">
+      <button id="validate" class="hidden button">
+         Confirmar
+   </button>
+   </div>
+
+</form>
+
+<div id ="res-right"></div>
+
+</section>
+
+
+<section id='zona-misreservas'></section>
+<section id='admin-forms'>
+
+
+
+
+<br>
+<div class="form3">
+ 
+      <form id="myForm" onsubmit="return validar()">
+        {# <div class="form-group">
+          <legend>Datos de la Cuenta</legend>
+          <label for="user">:</label>
+          <input type="text" class="form-control" id="user" placeholder="Usuario">
+          <label for="email">Correo Electronico:</label>
+          <input type="email" class="form-control" id="email" placeholder="nombre@ejemplo.com">
+          <label for="Pass1">Contraseña:</label>
+          <input type="password" class="form-control" id="pass1" placeholder="Contraseña">
+          <label for="pass2">Rep. Contraseña:</label>
+          <input type="password" class="form-control" id="pass2" placeholder="Repetir Contraseña">
+          <label for="codipos">Código Postal:</label>
+          <input type="text" class="form-control" id="codipos" placeholder="Codigo Postal">
+        </div> #}
+
+        <div class="form-group">
+          {# <legend>Datos</legend> #}
+          <div class="row-form-group">
+          <span>Tipo:</span>
+          <input type="radio" id="tipoPiso" name="tipoPiso"> Piso Completo
+          <input type="radio" id="tipoHab" name="tipoHab"> Habitación <br>
+          </div>
+          <br>
+          {# <div id="radio-group">
+
+          </div> #}
+          <div class="row-form-group">
+          
+          <span>Ciudad:</span>      
+            <select class="form-control" id="select-ciudad">
+              <option value="Lota">Seleccionar</option>
+              <option value="Madrid">Madrid</option>
+              <option value="Barcelona">Barcelona</option>
+              <option value="Valencia">Valencia</option>
+              <option value="Sevilla">Sevilla</option>
+              <option value="Bilbao">Bilbao</option>
+              <option value="Mallorca">Mallorca</option>
+            </select>      
+
+          </div>
+          <br>
+          <div class="row-form-group">
+          <span>Dirección</span>
+          <input type="text"  id="direccion" class="form-control">
+          </div>
+          <br>
+          <div class="row-form-group">
+          <span>Precio :</span>
+          <input type="text" id="precio-input" name="precio-input">
+          Fianza :
+          <input type="text" id="precio-input" name="precio-input">  
+          </div>
+          <br>
+          {# <label for="reglas">Reglas:</label><br> #}
+          <div class="row-form-group">
+          <input type="checkbox" class="check-reglas"> Parejas  
+          <input type="checkbox" class="check-reglas"> Mascotas 
+          <input type="checkbox" class="check-reglas"> Fiestas 
+          <input type="checkbox" class="check-reglas"> Fumar    
+          </div>
+          <br>
+
+          <div class="colum-form-group">
+          <label for="caracteristicas">Características:</label>
+          <div class="row-form-group">
+          <input type="radio" id="carCompleto" name="tipoPiso"> Completo
+          <input type="radio" id="carEconomico" name="tipoHab"> Económico <br>
+          </div>
+          <div class="row-form-group">
+          <span>Playa</span>
+          <input type="radio" id="playaSi" name="playaSi"> Sí
+          <input type="radio" id="playaNo" name="playaNo"> No <br>
+          </div>
+          </div>
+          
+          <div class="column-form-group">
+          <span for="imagenes">Imagenes</span>
+          <input type="text" id="imagenes-input" name="imegenes" class="form-control">
+          </div>
+        </div>
+        <button id="savePiso">Guardar</button>
+      </form>
+</div> 
+
+
+</section>
+    <footer>
+
+    
+        <div id="titulosFooter">
+            <h2>Conoce Más</h2>
+            <h2>Contacto</h2>
+            <h2>Redes Sociales</h2>
+        </div>
+
+
+        <div id="footerListas">
+            <ul>
+                <li><a href="">Sobre Nosotros</a></li>
+                <li><a href="">Trabaja con Nosotros</a></li>
+                <li><a href="">Términos y Condiciones</a></li>
+                <li><a href="https://protecciondatos-lopd.com/empresas/modelo-aviso-legal-web/">Aviso Legal</a></li>
+                <li><a href="">Politíca de privacidad</a></li>
+                <li><a href="">Politíca de Cookies</a></li>
+            </ul>
+            <ol>
+                <li><i class="fas fa-location-arrow"></i>Fuenlabrada,Paseo Facultades,6</li>
+                <br>
+                <li><i class="fas fa-phone"></i>+34 691 914 166</li>
+                <br>
+                <li><i class="fas fa-envelope"></i>domustudent@gmail.com</li>
+            </ol>
+
+             <ol id="listSocial">
+                <li><i class="fab fa-instagram"></i></li>
+                <li><i class="fab fa-linkedin"></i></i></li>
+                <li><i class="fab fa-twitter"></i></li>
+                <li><i class="fab fa-facebook"></i></li>
+                <li><i class="fab fa-youtube"></i></li>
+            </ol>
+
+        </div>
+
+        {# <h3><img src="PROYECTO DOMUS/IMG/ICONOS/Copyrigth.svg" width="20px" height="15px">2022 Domus</h3> #}
+   
+
+    </footer>
+
+    {% block javascripts %}
+        <script src="{{ asset('js/main.js') }}" type="text/javascript"></script>
+        
+        
+        <!-- Swiper JS -->
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            spaceBetween: 30,
+            centeredSlides: true,
+            autoplay: {
+                delay: 7500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+    </script>
+    <!-- Agregar la librería de Google Maps API -->
+{# <script src="https://maps.googleapis.com/maps/api/js"></script> #}
+
+    {% endblock %}
+
+    
+
+</body>
+
+
+</html>
+
