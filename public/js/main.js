@@ -1,4 +1,4 @@
-
+let idioma = document.getElementById("idioma").innerHTML
 // #region swiper-slide Event
 
 function getCityNameByIndice(indice){
@@ -34,7 +34,8 @@ function asignarEvento(collection,callback,subcallback) {
 }
 
 function printDivPisos(piso){
-   
+    
+    let idioma = document.getElementById("idioma").innerHTML
     let div = document.createElement("div");
     div.setAttribute("class", "divPisos");
 
@@ -43,7 +44,14 @@ function printDivPisos(piso){
     idHide.hidden = true
     
     let h1 = document.createElement("h1")
-    h1.innerHTML = "Piso en " + piso.direccion;
+   
+    if(piso.tipoEst == "piso"){
+        h1.innerHTML = "Piso en " + piso.direccion;
+    }else{
+      h1.innerHTML = "Habitación en " + piso.direccion;
+    }
+   
+    
 
     let imagen = image("images/proyecto/pisos/MADRID/JacintoBenavente.jpg")
     imagen.setAttribute('class','foto')
@@ -52,7 +60,7 @@ function printDivPisos(piso){
     div.appendChild(imagen)
     div.appendChild(h1)
     div.appendChild(getList(piso))
-    div.addEventListener("click", printPiso2(piso))
+    div.addEventListener("click", printPiso(piso))
 
     document.getElementById("zonaPisos").append(div)
 
@@ -88,20 +96,36 @@ function auxDataList(li,iClass,text){
 function setDataList(indice,piso){
     
     let li = document.createElement("li")
-    let icon
+    let idioma = document.getElementById("idioma").innerHTML
     
     switch (indice) {
         case 0:
+          if(idioma == "english"){
+            auxDataList(li,"fas fa-door-open","Bedrooms " + piso.idCar.numHab)
+          }else{
             auxDataList(li,"fas fa-door-open","Habitaciones " + piso.idCar.numHab)
+          }        
           break;
         case 1:
+          if(idioma == "english"){
+            auxDataList(li,"fas fa-bath","Toilets " + piso.idCar.numBanos)
+          }else{
             auxDataList(li,"fas fa-bath","Baños " + piso.idCar.numBanos)
+          }           
           break;
         case 2:
+          if(idioma == "english"){
+            auxDataList(li,"fas fa-euro-sign","Price " + piso.precioMes + "/Month")
+          }else{
             auxDataList(li,"fas fa-euro-sign","Precio " + piso.precioMes + "/Mes")
+          }   
           break;
         case 3:
-            auxDataList(li,"fas fa-wallet","Fianza " + piso.fianza)
+          if(idioma == "english"){
+            auxDataList(li,"fas fa-wallet","Deposit €" + piso.fianza)
+          }else{
+            auxDataList(li,"fas fa-wallet","Fianza " + piso.fianza + " €")
+          }           
     }
 
     return li
@@ -114,21 +138,14 @@ function setDataList(indice,piso){
 function setLoginForm(){
 
   let bodyElements = document.body.children
-
   bodyElements[2].style.display = "none";//fondo
   bodyElements[4].style.display = "flex";//form
   bodyElements[5].style.display = "none";//swiper
   bodyElements[6].style.display = "none";//zonaInfo
   bodyElements[7].innerHTML='';//zonaPisos
-  // bodyElements[8].style.display = "none"; // formReserva
-    
-    // document.getElementById("form").style.display = "flex";
-    // document.getElementById("fondo").style.display = "none";
-    // document.getElementById("swiper-wrap").style.display = "none";
-    // document.getElementById("zonaInfo").style.display = "none";
-    // zonaPisos.innerHTML = ""
-    document.getElementById("SubmitL").addEventListener("click",login);
-    document.getElementById("SubmitR").addEventListener("click",register);
+
+  document.getElementById("SubmitL").addEventListener("click",login);
+  document.getElementById("SubmitR").addEventListener("click",register);
 }
 
 // #endregion
@@ -155,7 +172,6 @@ function getPisos(cityName){
                 zonaPisos.innerHTML = ""
                 pisos.forEach(printDivPisos)
             })
-
     }
 }
 
@@ -177,23 +193,24 @@ function register() {
 
     if (nombre != "" && p_apellido != "" && s_apellido != "" && email != "" && pass != "") {
                 if (pass == document.forms.form['Password'].value) {
-                    fetch("http://localhost:8000/prueba", {
+                    fetch("http://localhost:8000/register", {
                         method: "POST",
                         body: JSON.stringify(data),
                         headers: {
                             'Content-Type': 'application/json'
                         }
                     }).then(function (respuesta) {
-                        return respuesta.text()
+                       return respuesta.text()
                     }).then(function (text) {
-                       console.log(text)
+                      Alert.success('Se ha registrado correctamente , Usuario : ' +  text,'Registro',{displayDuration: 6000, pos: 'top'})
+                      okLog()
                     })
 
                 } else {
-                    alert("Las contraseñas no coinciden")
+                  Alert.error('Las contraseñas no coinciden','Revise contraseñas',{displayDuration: 6000, pos: 'top'})
                 }
     } else {
-        alert("Campos requeridos sin rellenar")
+      Alert.warning('Campos requeridos sin rellenar','Rellene el formulario',{displayDuration: 6000, pos: 'top'})
     }
 }
 
@@ -360,34 +377,56 @@ function imageSwip(i){
 }
 
 
-
-
-function printPiso2(piso){
-    return function(){
-        //let info = document.getElementById("info")
-        let zonaInfo = document.getElementById("zonaInfo")
-
-        document.getElementById("zonaPisos").innerHTML=""
-        let array = document.getElementsByClassName("prueba")
-        auxPrintPiso2(array)
-        //info.style.display="flex";
-        zonaInfo.style.display="flex";
-        if(limpiarDiv(zonaInfo.children[0].children[3])){
-          zonaInfo.children[0].children[3].append(showPisoData(piso),
-          caracteristicas(piso.idCar,auxCar),caracteristicas(piso.idReg,auxReg));
-          
-          if(zonaInfo.children[0].children[3].appendChild(mapa())) initialize() 
-          
-          
-          zonaInfo.children[1].append(buttonReserva(piso));
-          console.log(piso)
-        }     
-    }
+function printPiso(piso,idioma){
+  return function(){
+      
+      let zonaInfo = document.getElementById("zonaInfo");
+      let hidden = document.getElementById("idioma")
+      hidden.innerHTML = idioma;
+      document.getElementById("zonaPisos").innerHTML=""
+      let array = document.getElementsByClassName("prueba")
+      auxPrintPiso(array)
+      zonaInfo.style.display="flex";
+      let imagen;
+      if(idioma == "english"){
+        imagen = image("images/proyecto/iconos/espana.png");
+        imagen.onclick = printPiso(piso);
+      }else{
+        imagen = image("images/proyecto/iconos/reino-unido.png");
+        imagen.onclick = printPiso(piso,"english");
+      }
+      imagen.setAttribute("class","bandera");
+      if(limpiarDiv(zonaInfo.children[0].children[4])){
+        zonaInfo.children[0].children[4].append( imagen,showPisoData(piso),
+        caracteristicas(piso.idCar,auxCar,"car"),caracteristicas(piso.idReg,auxReg,"reg"));
+        
+        if(zonaInfo.children[0].children[4].appendChild(mapa())) initialize() 
+        
+        
+        zonaInfo.children[1].append(buttonReserva(piso));
+        
+        // console.log(piso)
+      }     
+  }
 }
 
 function showPisoData(piso){
+    let idioma = document.getElementById("idioma").innerHTML
     let h1 = document.createElement("h1")
-    h1.innerHTML = "Piso en " + piso.direccion;
+    if(piso.tipoEst == "piso"){
+      if(idioma == "english"){
+        h1.innerHTML = "Flat to rent,  " + piso.direccion;
+      }else{
+        h1.innerHTML = "Piso en " + piso.direccion;
+      }
+    }else{
+      if(idioma == "english"){
+        h1.innerHTML = "1 Bed Flat to rent,  " + piso.direccion;
+      }else{
+        h1.innerHTML = "Habitación de Piso en " + piso.direccion;
+      }
+    }
+    // h1.innerHTML = "Piso en " + piso.direccion;
     let div = document.createElement("div");
     div.append(h1,getList(piso))
     div.setAttribute("class","infoDiv")
@@ -395,8 +434,23 @@ function showPisoData(piso){
 
 }
 
-function caracteristicas(obj,callback){
+function caracteristicas(obj,callback,text){
+    let idioma = document.getElementById("idioma").innerHTML
     let div = document.createElement("div");
+    let titulo = document.createElement("h1");
+    if(text == "car"){
+      if(idioma == "english"){
+        titulo.innerHTML = "Features";
+      }else{
+        titulo.innerHTML = "Características";
+      }
+    }else{
+      if(idioma == "english"){
+        titulo.innerHTML = "Rules";
+      }else{
+        titulo.innerHTML = "Reglas";
+      }
+    }   
     let ul = document.createElement("ul");
     for (atr in obj) {
 
@@ -405,60 +459,128 @@ function caracteristicas(obj,callback){
         if(li.innerHTML != "")  ul.append(li)
         //   if(li.innerHTML != "")
       }
-    div.append(ul)
+    div.append(titulo,ul)
     div.setAttribute('class','infoDiv')
     return div
 }
 
 function auxCar(atr,obj){
 
+  let idioma = document.getElementById("idioma").innerHTML;
+  
     let li = document.createElement("li")   
     switch (atr) {        
         case "television":
-            if(obj[atr]) li.append(newIcon("fas fa-tv"),atr)      ////////Fijarse en esta fila
+          if(obj[atr]) li.append(newIcon("fas fa-tv"),"TV") 
           break;
         case "amueblado":
-            li.append(newIcon("fas fa-couch"),atr) 
+          if(obj[atr]){
+            if(idioma == "english"){
+              li.append(newIcon("fas fa-couch"),"Furnished")
+            }else{
+              li.append(newIcon("fas fa-couch"),"Amueblado")
+            }
+            }   
         break;
         case "llaveDormitorio":
-            li.append(newIcon("fas fa-key"),atr) 
+          if(obj[atr]){
+            if(idioma == "english"){
+              li.append(newIcon("fas fa-key"),"Bedroom Key")
+            }else{
+              li.append(newIcon("fas fa-key"),"Llave Dormitorio")
+            }
+            }       
         break;
         case "calefaccion":
-            li.append(newIcon("fas fa-temperature-high"),atr) 
+          if(obj[atr]){
+            if(idioma == "english"){
+              li.append(newIcon("fas fa-temperature-high"),"Heating") 
+            }else{
+              li.append(newIcon("fas fa-temperature-high"),"Calefacción") 
+            }
+          }
         break;
-        case "balcon":
-            li.append(newIcon("fas fa-tree"),atr) 
+        case "exterior":
+          if(obj[atr]){
+            if(idioma == "english"){
+              li.append(newIcon("fas fa-tree"),"Outside") 
+            }else{
+              li.append(newIcon("fas fa-tree"),"Exterior") 
+            }
+          }
         break;
         case "ascensor":
-            li.append(newIcon("fas fa-arrow-up"),atr) 
+          if(obj[atr]){
+            if(idioma == "english"){
+              li.append(newIcon("fas fa-arrow-up"),"Lift") 
+            }else{
+              li.append(newIcon("fas fa-arrow-up"),"Ascensor") 
+            }
+          }
         break;        
         case "aireAcond":
-            li.append(newIcon("fas fa-fan"),atr) 
+          if(obj[atr]){
+            if(idioma == "english"){
+              li.append(newIcon("fas fa-fan"),"Air-Conditioning") 
+            }else{
+              li.append(newIcon("fas fa-fan"),"Aire Acond.") 
+            }
+          }
         break;
         case "garaje":
-            li.append(newIcon("fas fa-warehouse"),atr) 
+          if(obj[atr]){
+            if(idioma == "english"){
+              li.append(newIcon("fas fa-warehouse"),"Garage")  
+            }else{
+              li.append(newIcon("fas fa-warehouse"),"Garaje") 
+            }
+          }
         break;
         case "lavadora":
-            li.append(newIcon("fas fa-soap"),atr) 
+          if(obj[atr]){
+            if(idioma == "english"){
+              li.append(newIcon("fas fa-soap"),"Washer")   
+            }else{
+              li.append(newIcon("fas fa-soap"),"Lavadora")  
+            }
+          }
         break;
         case "internet":
-            li.append(newIcon("fas fa-wifi"),atr) 
+          if(obj[atr]) li.append(newIcon("fas fa-wifi"),"Internet") 
         break;
         case "playa":
-            li.append(newIcon("fas fa-umbrella-beach"),atr) 
+          if(obj[atr]){
+            if(idioma == "english"){
+              li.append(newIcon("fas fa-umbrella-beach"),"Beach") 
+            }else{
+              li.append(newIcon("fas fa-umbrella-beach"),"Playa")   
+            }
+          }
         break;
         case "cocinaEquipada":
-            li.append(newIcon("fas fa-sink"),atr) 
+          if(obj[atr]){
+            if(idioma == "english"){
+              li.append(newIcon("fas fa-sink"),"Equipped Kitchen") 
+            }else{
+              li.append(newIcon("fas fa-sink"),"Cocina Equipada") 
+            }
+          }
         break;
         case "luminoso":
-            li.append(newIcon("fas fa-lightbulb"),atr) 
+          if(obj[atr]){
+            if(idioma == "english"){
+              li.append(newIcon("fas fa-lightbulb"),"Bright")  
+            }else{
+              li.append(newIcon("fas fa-lightbulb"),"Luminoso") 
+            }
+          }
         break;
     }
 
     return li
 }
 
-function auxPrintPiso2(array){
+function auxPrintPiso(array){
     // let img = document.createElement('img');
     // img.src = "images/proyecto/pisos/MADRID/CHALET LASROZAS/ROZAS3.png"
     for (let i = 0; i < array.length; i++) {
@@ -483,22 +605,48 @@ function newIcon(text){
 
 function auxReg(atr,obj){
 
+  let idioma = document.getElementById("idioma").innerHTML;
+
     let li = document.createElement("li")   
     switch (atr) {        
         case "parejas":
-            if(!obj[atr]) li.append(newIcon("fas fa-heart"),atr)      ////////Fijarse en esta fila
+          if(!obj[atr]){
+            if(idioma == "english"){
+              li.append(newIcon("fas fa-heart"),"No Couples")  
+            }else{
+              li.append(newIcon("fas fa-heart"),"No Parejas")   
+            }
+          }  
           break;
         case "mascotas":
-            li.append(newIcon("fas fa-dog"),atr) 
+          if(!obj[atr]){
+              if(idioma == "english"){
+                li.append(newIcon("fas fa-dog"),"No Pets") 
+              }else{
+                li.append(newIcon("fas fa-dog"),"No Mascotas") 
+              }
+            }     
         break;
         case "fiestas":
-            li.append(newIcon("fas fa-gift"),atr) 
+          if(!obj[atr]){
+            if(idioma == "english"){
+              li.append(newIcon("fas fa-gift"),"No Parties") 
+            }else{
+              li.append(newIcon("fas fa-gift"),"No Fiestas") 
+            }
+          }  
         break;
         case "fumar":
-            li.append(newIcon("fas fa-smoking"),atr) 
+          if(!obj[atr]){
+            if(idioma == "english"){
+              li.append(newIcon("fas fa-smoking"),"No Smoking") 
+            }else{
+              li.append(newIcon("fas fa-smoking"),"No Fumar") 
+            }
+          }  
     }
 
-    return li
+    return li 
 }
 
 
@@ -732,19 +880,30 @@ function limpiarDiv(div){
 
 function showReserva(piso){
 
-    // return function(){
-            
+    // return function(){   
 
         let reserva = document.getElementById("formReserva")
         reserva.style.display= "flex"
         document.getElementById("zonaInfo").style.display= "none"
         let div = document.getElementById("res-right")
+        let h1 = document.createElement("h1")
+        h1.innerHTML = "Piso en " + piso.direccion
+        let ul =  document.createElement("ul")
+        let hab =  document.createElement("li")
+        let bath =  document.createElement("li")
+        let precio =  document.createElement("li")
+        let fianza =  document.createElement("li")
+        hab.innerHTML = "<i class='fas fa-door-open'></i> Habitaciones " + piso.idCar.numHab
+        bath.innerHTML = "<i class='fas fa-bath'></i> Baños " + piso.idCar.numBanos
+        precio.innerHTML = "<i class='fas fa-euro-sign'></i> Precio " + piso.precioMes + "/Mes"
+        fianza.innerHTML = "<i class='fas fa-wallet'></i> Fianza " + piso.fianza + " €"
+        ul.append(hab,bath,precio,fianza);
         // div.innerHTML = ""
         if(limpiarDiv(div)){
           let imagen = image("images/proyecto/pisos/MADRID/JacintoBenavente.jpg")
           imagen.setAttribute("id","imgForm")
           console.log(piso.idEst)
-          div.append(imagen,showPisoData(piso))
+          div.append(imagen,h1,ul)
           reserva.append(div)
           checkDisponible.onclick = comprobarDisponible(piso)
           submitButton.addEventListener("click",reservar(piso))
@@ -752,6 +911,7 @@ function showReserva(piso){
     // }
     
 }
+ 
 
 function logout(){
     let url = new URL("http://localhost:8000/logout");
@@ -766,6 +926,7 @@ function logout(){
             document.getElementById('btForm').style.display = 'flex'
             document.getElementById('btExit').style.display = 'none'
             document.getElementById('menu').children[3].style.display = "none"
+            document.getElementById('menu').children[4].style.display = "none"
             home()
             
             Alert.success('Sesión cerrada con éxito','Sesión Cerrada',{displayDuration: 6000, pos: 'top'})
@@ -868,15 +1029,18 @@ function getReservas(){
               return respuesta.json()
           }).then(function (reservas) {
               console.log(reservas)
-              document.getElementById("fondo").style.display = "none";
-              document.getElementById("swiper-wrap").style.display = "none";
-              zonaPisos.innerHTML = ""
-              zonaPisos.style.display = "none";
-              reservas.forEach(printDivReservas)
-              zona_misreservas.style.display = "flex";
+              if(reservas.length > 0){
+                document.getElementById("fondo").style.display = "none";
+                document.getElementById("swiper-wrap").style.display = "none";
+                zonaPisos.innerHTML = ""
+                zonaPisos.style.display = "none";
+                reservas.forEach(printDivReservas)
+                zona_misreservas.style.display = "flex";
+              }else{
+                Alert.info('No tienes Reservas para ver','Sin Reservas',{displayDuration: 6000, pos: 'top'})
+              }
           })
 
-  // }
 }
 
 function newDiv(i,text){
@@ -1037,7 +1201,8 @@ function comprobarDisponible(piso){
 
 $('input[name="phone"]').mask('(000) 000 0000');
 $('input[name="tarjeta"]').mask('0000-0000-0000-0000');
-
+// $('input[name="phone"]').mask('(000) 000 0000');
+// $('input[name="tarjeta"]').mask('0000-0000-0000-0000');
 
 function home(){
   
@@ -1051,10 +1216,14 @@ function home(){
   bodyElements[8].style.display = "none"; // formReserva
   bodyElements[9].style.display = "none"; // zonaMisReservas
   bodyElements[9].innerHTML=''
+  bodyElements[10].style.display = "none";
+  bodyElements[10].innerHTML=''
+  bodyElements[11].style.display = "none";
+
   // zona_misreservas.innerHTML=''
   // zona_misreservas.style.display = "none"
   inicializarInputDate()
-  cleanDataForms()
+  cleanDataForms()   //PROBAR A CAMBIAR CON forms.reset()
 }
 
 
@@ -1205,7 +1374,7 @@ function getClientesAdmin(){
           .then(function (respuesta) {
               return respuesta.json()
           }).then(function (clientes) {
-              console.log(clientes)
+              // console.log(clientes)
               document.getElementById("fondo").style.display = "none";
               document.getElementById("swiper-wrap").style.display = "none";
               zonaPisos.innerHTML = ""
@@ -1216,8 +1385,9 @@ function getClientesAdmin(){
               // zona_misreservas.appendChild(wrap);
               zona_misreservas.style.display = "flex"
               zona_misreservas.innerHTML=""
+              topAdmin("Cliente");
               let promise = new Promise((resolve, reject) => {
-                zona_misreservas.appendChild(newDiv("id","wrapClientes"))
+                zona_misreservas.appendChild(newDiv("id","wrapClientes"));                
                 resolve(clientes)
               });
               promise.then((clientes) => clientes.forEach(printDivClientes)
@@ -1308,11 +1478,12 @@ function getReservasAdmin(){
               zonaPisos.innerHTML = ""
               zonaPisos.style.display = "none";
               // let wrap  = newDiv("id","wrapClientes");
-
+              
               // clientes.forEach(printDivClientes);
               // zona_misreservas.appendChild(wrap);
               zona_misreservas.style.display = "flex"
               zona_misreservas.innerHTML=""
+              topAdmin("Reserva");
               let promise = new Promise((resolve, reject) => {
                 zona_misreservas.appendChild(newDiv("id","wrapClientes"))
                 resolve(reservas)
@@ -1336,18 +1507,145 @@ function topAdmin(text){
 
   let input = document.createElement('input');
   input.setAttribute('type','text');
+  input.setAttribute('id','filtro');
+  
 
   let btfiltro = document.createElement('button');
+  btfiltro.setAttribute('id','btfiltro');
   btfiltro.innerHTML = 'Buscar';
-
-  let btNuevo = document.createElement('button');
-  btNuevo.innerHTML = 'Nuevo ' + text;
-  
+  btfiltro.onclick = filtrar(text)
   filtro.append(input,btfiltro);
-  btdiv.append(filtro, btNuevo);
+  if(text == "Piso"){
+    input.setAttribute("placeholder","Direccón");
+    let btNuevo = document.createElement('button');
+    btNuevo.innerHTML = 'Nuevo ' + text;
+    btNuevo.onclick = formPiso;
+    btdiv.append(filtro, btNuevo);
+  }else{
+    input.setAttribute("placeholder","email");
+    btdiv.append(filtro);
+  } 
   zona_misreservas.appendChild(btdiv);
 
 }
+
+function formPiso(){
+ 
+  zona_misreservas.style.display = "none";
+  document.getElementById("wrap-piso-form").style.display = "flex";
+  document.getElementById("hiddenPiso").value = "New"
+  document.forms.piso_form.reset();
+  document.getElementById("savePiso").addEventListener("click",savePiso)
+
+}
+
+
+function savePiso(){
+  
+  event.preventDefault()
+  let selectCity = document.getElementById('select-ciudad');
+
+  let selectedCity = selectCity.options[selectCity.selectedIndex].value 
+  
+  let tipo,car,playa;
+  
+  if(document.getElementById('tipoPiso').checked){
+    tipo = "piso"
+  }else{
+    tipo = "habitacion"
+  }
+
+  if(document.getElementById('carCompleto').checked){
+    car = "completo"
+  }else{
+    car = "economico"
+  }
+
+  if(document.getElementById('playaSi').checked){
+    playa = "Si"
+  }else{
+    playa = "No"
+  }
+
+  let reglas = document.getElementsByClassName("check-reglas");
+  let regla1,regla2,regla3,regla4;
+  if(reglas[0].checked){
+  regla1 = true
+  }else{
+  regla1 = false
+  }
+
+  if(reglas[1].checked){
+    regla2 = true
+  }else{
+    regla2 = false
+  }
+
+  if(reglas[2].checked){
+    regla3 = true
+  }else{
+    regla3 = false
+  }
+
+  if(reglas[3].checked){
+    regla4 = true
+  }else{
+    regla4 = false
+  }
+  
+  let direccion = document.forms.piso_form['direccion_new'].value
+  let precio = document.forms.piso_form['precio_new'].value
+  let fianza = document.forms.piso_form['fianza_new'].value
+  let id = document.forms.piso_form['hiddenPiso'].value
+  
+  let data = {
+   idPiso: id,
+   city: selectedCity,
+   tipo: tipo,
+   car: car,
+   playa : playa,
+   dir : direccion,
+   precio: precio,
+   fianza :fianza,
+   parejas : regla1,
+   mascotas : regla2,
+   fiestas : regla3,
+   fumar : regla4
+}
+if (direccion != "" && precio != "" && fianza != "") {
+  fetch("http://localhost:8000/newPiso", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+        'Content-Type': 'application/json'
+    }
+}).then(function (respuesta) {
+    return respuesta.text()
+}).then(function (text) {
+  Alert.success('Nuevo piso registrado','Piso registrado',{displayDuration: 6000, pos: 'top'});
+  document.getElementById("wrap-piso-form").style.display = "none";
+  document.forms.piso_form.reset();
+  home();
+})
+}else{
+  Alert.error('Campos requeridos sin rellenar','Rellena los campos',{displayDuration: 6000, pos: 'top'});
+}
+
+}
+
+
+// function radios(text){
+
+// let radios = document.getElementsByName(text);
+// let valor;
+// for (var i = 0; i <  radios.length; i++) {
+//   if (radios[i].checked) {
+//     valor = radios[i].checked.value
+//     break;
+//   }
+// }
+// return valor;
+// }
 
 
 function printDivClientes(cliente){
@@ -1362,14 +1660,14 @@ function printDivClientes(cliente){
   
   let buttons = newDiv("class","btsCliente");
   let edit = document.createElement("button");
-  let show = document.createElement("button");
+  let deleteCli = document.createElement("button");
 
-  show.innerHTML = "<i class='fas fa-eye'></i>";
+  deleteCli.innerHTML = "<i class='fas fa-ban'></i>";
   edit.innerHTML = "<i class='fas fa-pen'></i>";
 
-  show.onclick = getReservasCliente(cliente)
+  deleteCli.onclick = deleteCliente(cliente.id)
   edit.onclick = CreateEditClientForm(cliente)
-  buttons.append(edit,show);
+  buttons.append(edit,deleteCli);
   div.append(h4,buttons);
   wrap.append(div);
 
@@ -1400,15 +1698,18 @@ function printDivPisosAdmin(piso){
   let buttons = newDiv("class","btsCliente");
   let borrar = document.createElement("button");
   let edit = document.createElement("button");
-  let show = document.createElement("button");
+  // let show = document.createElement("button");
   
-  borrar.innerHTML = "<i class='fas fa-ban'></i>";
-  show.innerHTML = "<i class='fas fa-eye'></i>";
-  edit.innerHTML = "<i class='fas fa-pen'></i>";
+  borrar.innerHTML = "<i class='fas fa-ban'>Delete</i>";
+  // show.innerHTML = "<i class='fas fa-eye'></i>";
+  edit.innerHTML = "<i class='fas fa-pen'>Edit</i>";
+  
 
+  borrar.onclick = deletePiso(piso.idEst);
+  edit.onclick = EditPisoForm(piso);
   // show.onclick = getReservasCliente(cliente)
   // edit.onclick = CreateEditClientForm(cliente)
-  buttons.append(show,edit,borrar);
+  buttons.append(edit,borrar);
   div.append(piso_info,buttons);
   wrap.append(div);
 
@@ -1416,10 +1717,8 @@ function printDivPisosAdmin(piso){
 }
 
 
-
 function printDivReservasAdmin(reserva){
-  
-  
+    
   let wrap  = document.getElementById("wrapClientes");
   let div = newDiv("class","divClientes");
   let piso = document.createElement("h4");
@@ -1491,13 +1790,14 @@ function CreateEditClientForm(cliente){
        
   let div = newDiv("class","form");
   let form = document.createElement("form")
-  
+  form.setAttribute("id", "editClientForm");
   
   let h1 = document.createElement("h1");
   h1.innerHTML = "Editar Usuario: " + cliente.email;
 
   let nombre = document.createElement("input");
   nombre.setAttribute("type", "text");
+  nombre.setAttribute("id", "new-nombre");
   nombre.setAttribute("name", "nombre");
   nombre.setAttribute("placeholder", "Nombre");
   nombre.setAttribute("value", cliente.nombre);
@@ -1505,24 +1805,31 @@ function CreateEditClientForm(cliente){
   // input2.setAttribute("id", "reintegro");
   let papellido = document.createElement("input");
   papellido.setAttribute("type", "text");
+  papellido.setAttribute("id", "new-papellido");
   papellido.setAttribute("name", "papellido");
   papellido.setAttribute("placeholder", "Primer Apellido");
+  papellido.setAttribute("value", cliente.pApellido);
 
   let sapellido = document.createElement("input");
   sapellido.setAttribute("type", "text");
+  sapellido.setAttribute("id", "new-sapellido");
   sapellido.setAttribute("name", "sapellido");
   sapellido.setAttribute("placeholder", "Segundo Apellido");
+  sapellido.setAttribute("value", cliente.sApellido);
 
   let password = document.createElement("input");
+  password.setAttribute("id", "new-password");
   password.setAttribute("type", "password");
   password.setAttribute("name", "password");
-  password.setAttribute("placeholder", "Contraseña");
+  password.setAttribute("placeholder", "Nueva Contraseña");
 
-  let guardar = document.createElement("input");
-  guardar.setAttribute("type", "submit");
-  guardar.setAttribute("value", "Guardar");
+  let guardar = document.createElement("button");
+  // guardar.setAttribute("type", "submit");
   guardar.setAttribute("id", "saveEdit");
+  guardar.innerHTML = "Guardar"
   
+  guardar.onclick = editCliente(cliente)
+
   form.append(h1,nombre,papellido,sapellido,password,guardar);
   div.appendChild(form);
   
@@ -1540,3 +1847,271 @@ function CreateEditClientForm(cliente){
 
 }
 
+function EditPisoForm(piso){
+
+return function(){
+formPiso();
+if(piso.tipoEst !== "piso"){
+  document.forms.piso_form['tipoHab'].checked = true
+}
+
+let hidden = document.getElementById("hiddenPiso");
+hidden.value = piso.idEst;
+
+let selectCity = document.getElementById('select-ciudad');
+
+selectCity.selectedIndex = piso.idCiudad.idCiudad - 1; 
+
+document.forms.piso_form['direccion_new'].value = piso.direccion
+document.forms.piso_form['precio_new'].value = piso.precioMes
+document.forms.piso_form['fianza_new'].value = piso.fianza
+
+if(piso.idCar.idCar == 1){
+    document.forms.piso_form['carCompleto'].checked = true
+    document.forms.piso_form['playaNo'].checked = true
+}else if(piso.idCar.idCar == 2){
+    document.forms.piso_form['carEconomico'].checked = true
+    document.forms.piso_form['playaNo'].checked = true
+}else if(piso.idCar.idCar == 3){
+    document.forms.piso_form['carCompleto'].checked = true
+    document.forms.piso_form['playaSi'].checked = true
+}else if(piso.idCar.idCar == 4){
+    document.forms.piso_form['carEconomico'].checked = true
+    document.forms.piso_form['playaSi'].checked = true
+}
+console.log(piso.idReg.parejas)
+if(piso.idReg.parejas){
+  document.forms.piso_form['checkParejas'].checked = true
+}
+if(piso.idReg.mascotas == true){
+  document.forms.piso_form['checkMascotas'].checked = true
+}
+if(piso.idReg.fiestas == true){
+  document.forms.piso_form['checkFiestas'].checked = true
+}
+if(piso.idReg.fumar == true){
+  document.forms.piso_form['checkFumar'].checked = true
+}
+
+// if(piso.idCar.idCar == 1){
+//   document.forms.piso_form['fianza_new'].value = piso.fianza
+// document.forms.piso_form['fianza_new'].value = piso.fianza
+// }else if()
+// document.forms.piso_form['fianza_new'].value = piso.fianza
+// document.forms.piso_form['fianza_new'].value = piso.fianza
+// }
+
+}
+}
+
+function deletePiso(idPiso){
+
+  return function(){
+  let url = new URL("http://localhost:8000/deletepiso?id=param");
+  url = url.toString().replace("param", idPiso) //Hay que pasarlos a string previamente
+  
+  // let zonaPisos = document.getElementById("zonaPisos"); //Esta línea no es necesaria , pero es por Info
+
+  fetch(url)
+      .then(function (respuesta) {
+          return respuesta.text()
+      }).then(function (text) {
+          console.log(text)
+          getPisosAdmin();
+          // document.getElementById("swiper-wrap").style.display = "none";
+          // zonaPisos.style.display = "flex";
+          // zonaPisos.innerHTML = ""
+          // pisos.forEach(printDivPisos)
+      })
+  }   
+}
+
+
+
+function editCliente(cliente){
+
+  return function(){
+
+    let new_nombre = document.forms.editClientForm['new-nombre'].value
+    let new_papellido = document.forms.editClientForm['new-papellido'].value
+    let new_sapellido = document.forms.editClientForm['new-sapellido'].value
+    let new_password = document.forms.editClientForm['new-password'].value
+
+
+    let data = {
+        email : cliente.email,
+        nombre: new_nombre,
+        papellido: new_papellido,
+        sapellido: new_sapellido,
+        password: new_password
+    }
+
+  let url = new URL("http://localhost:8000/editcliente");
+  // url = url.toString().replace("param", idPiso) //Hay que pasarlos a string previamente
+  
+  // let zonaPisos = document.getElementById("zonaPisos"); //Esta línea no es necesaria , pero es por Info
+
+      fetch("http://localhost:8000/editcliente",{
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      })
+        .then(function (respuesta) {
+          return respuesta.text()
+      }).then(function (text) {
+          home()
+          // document.getElementById("swiper-wrap").style.display = "none";
+          // zonaPisos.style.display = "flex";
+          // zonaPisos.innerHTML = ""
+          // pisos.forEach(printDivPisos)
+      })
+  }   
+}
+
+
+function deleteCliente(idCliente){
+
+  return function(){
+  let url = new URL("http://localhost:8000/deletecliente?id=param");
+  url = url.toString().replace("param", idCliente) //Hay que pasarlos a string previamente
+  
+  // let zonaPisos = document.getElementById("zonaPisos"); //Esta línea no es necesaria , pero es por Info
+
+  fetch(url)
+      .then(function (respuesta) {
+          return respuesta.text()
+      }).then(function (text) {
+          console.log(text)
+          getClientesAdmin();
+          // document.getElementById("swiper-wrap").style.display = "none";
+          // zonaPisos.style.display = "flex";
+          // zonaPisos.innerHTML = ""
+          // pisos.forEach(printDivPisos)
+      })
+  }   
+}
+
+function filtrar(text){
+  
+  return function(){
+  let url,email;
+  switch (text) {        
+    case "Piso":
+      let direccion = document.getElementById('filtro').value 
+      if(direccion == "Todas" || direccion == "todas"){
+        getPisosAdmin();
+      }else{
+        
+      url = new URL("http://localhost:8000/filtrar?t=piso&dir=param");
+      url = url.toString().replace("param", direccion)
+      
+      fetch(url)
+      .then(function (respuesta) {
+          return respuesta.json()
+      }).then(function (pisos) {
+          console.log(pisos)
+          if(pisos == "No existe"){
+              
+            Alert.error('No existen pisos en esa dirección','Piso no encontrado',{displayDuration: 6000, pos: 'top'})
+  
+          }else{
+            
+            zona_misreservas.innerHTML=""
+            topAdmin("Piso");
+            zona_misreservas.appendChild(newDiv("id","wrapClientes"))
+            pisos.forEach(printDivPisosAdmin)
+              
+          }
+         
+      })   
+      
+      }
+         
+      break;
+    case "Cliente":
+      email = document.getElementById('filtro').value  
+      if(email == "Todos" || email == "todos"){
+        getClientesAdmin();
+      }else{
+        
+        url = new URL("http://localhost:8000/filtrar?t=cliente&email=param");
+        url = url.toString().replace("param", email);
+        
+        fetch(url)
+        .then(function (respuesta) {
+            return respuesta.json()
+        }).then(function (cliente) {
+          
+          if(cliente == "No existe"){
+              
+            Alert.error('No existe un usuario con ese email','Usuario no encontrado',{displayDuration: 6000, pos: 'top'})
+  
+          }else{
+              
+            zona_misreservas.innerHTML="";
+            topAdmin("Cliente");
+            zona_misreservas.appendChild(newDiv("id","wrapClientes"));
+            printDivClientes(cliente);
+  
+          }
+        })   
+
+      }
+     
+    break;
+    case "Reserva":
+      email = document.getElementById('filtro').value
+      if(email == "Todos" || email == "todos"){
+        getReservasAdmin();
+      }else{
+
+      url = new URL("http://localhost:8000/filtrar?t=reserva&email=param");
+      url = url.toString().replace("param", email);
+      console.log(email);
+      fetch(url)
+      .then(function (respuesta) {
+          return respuesta.json()
+      }).then(function (reservas) {
+          console.log(reservas);
+          
+          if(reservas == "No existe"){
+            
+            Alert.error('No existen reservas de ese usuario','Usuario no encontrado',{displayDuration: 6000, pos: 'top'})
+
+          }else{
+              
+            zona_misreservas.innerHTML=""
+            topAdmin("Reserva");
+            zona_misreservas.appendChild(newDiv("id","wrapClientes"))               
+            reservas.forEach(printDivReservasAdmin);
+
+          }
+                  
+      })   
+
+      }  
+      
+  }
+}
+   
+}
+
+
+
+
+
+
+
+
+
+
+
+// fetch("http://localhost:8000/comprobarDisponible", {
+//   method: "POST",
+//   body: JSON.stringify(data),
+//   headers: {
+//       'Content-Type': 'application/json'
+//   }
+// }).then(function (respuesta) {

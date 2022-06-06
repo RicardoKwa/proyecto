@@ -42,12 +42,12 @@ class Estancia
      */
     private $fianza;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="disponible", type="boolean", nullable=false)
-     */
-    private $disponible;
+    // /**
+    //  * @var bool
+    //  *
+    //  * @ORM\Column(name="disponible", type="boolean", nullable=false)
+    //  */
+    // private $disponible;
 
     /**
      * @var string
@@ -56,19 +56,19 @@ class Estancia
      */
     private $direccion;
 
-    /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(name="fecha_ini_d", type="datetime", nullable=true, options={"default"="CURRENT_TIMESTAMP"})
-     */
-    private $fechaIniD = 'CURRENT_TIMESTAMP';
+    // /**
+    //  * @var \DateTime|null
+    //  *
+    //  * @ORM\Column(name="fecha_ini_d", type="datetime", nullable=true, options={"default"="CURRENT_TIMESTAMP"})
+    //  */
+    // private $fechaIniD = 'CURRENT_TIMESTAMP';
 
-    /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(name="fecha_fin_d", type="datetime", nullable=true)
-     */
-    private $fechaFinD;
+    // /**
+    //  * @var \DateTime|null
+    //  *
+    //  * @ORM\Column(name="fecha_fin_d", type="datetime", nullable=true)
+    //  */
+    // private $fechaFinD;
 
     /**
      * @var \Ciudad
@@ -141,17 +141,17 @@ class Estancia
         return $this;
     }
 
-    public function getDisponible(): ?bool
-    {
-        return $this->disponible;
-    }
+    // public function getDisponible(): ?bool
+    // {
+    //     return $this->disponible;
+    // }
 
-    public function setDisponible(bool $disponible): self
-    {
-        $this->disponible = $disponible;
+    // public function setDisponible(bool $disponible): self
+    // {
+    //     $this->disponible = $disponible;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getDireccion(): ?string
     {
@@ -165,29 +165,29 @@ class Estancia
         return $this;
     }
 
-    public function getFechaIniD(): ?\DateTimeInterface
-    {
-        return $this->fechaIniD;
-    }
+    // public function getFechaIniD(): ?\DateTimeInterface
+    // {
+    //     return $this->fechaIniD;
+    // }
 
-    public function setFechaIniD(?\DateTimeInterface $fechaIniD): self
-    {
-        $this->fechaIniD = $fechaIniD;
+    // public function setFechaIniD(?\DateTimeInterface $fechaIniD): self
+    // {
+    //     $this->fechaIniD = $fechaIniD;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function getFechaFinD(): ?\DateTimeInterface
-    {
-        return $this->fechaFinD;
-    }
+    // public function getFechaFinD(): ?\DateTimeInterface
+    // {
+    //     return $this->fechaFinD;
+    // }
 
-    public function setFechaFinD(?\DateTimeInterface $fechaFinD): self
-    {
-        $this->fechaFinD = $fechaFinD;
+    // public function setFechaFinD(?\DateTimeInterface $fechaFinD): self
+    // {
+    //     $this->fechaFinD = $fechaFinD;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getIdCiudad(): ?Ciudad
     {

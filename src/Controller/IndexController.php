@@ -77,11 +77,11 @@ public function car(EntityManagerInterface $entityManager , SerializerInterface 
 
 
 /**
- * @Route("/prueba", methods={"POST"})
+ * @Route("/register", methods={"POST"})
  * @return JsonResponse
  * @throws \Exception
  */
-public function prueba(Request $request,EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): JsonResponse
+public function register(Request $request,EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): JsonResponse
 {   
 
     $factory = new PasswordHasherFactory([
@@ -102,33 +102,14 @@ public function prueba(Request $request,EntityManagerInterface $entityManager, U
     $hash = $passwordHasher->hash($data['password']);
     $user->setPassword($hash);
         
-        // $hash = $passwordHasher->hash('plain');
-        // $data['password'])
-
-
-    
-    
-    // Retrieve the right password hasher by its name
-    // $passwordHasher = $factory->getPasswordHasher('common');
-    
-    // Hash a plain password
-    // $hash = $passwordHasher->hash('plain'); // returns a bcrypt hash
-    
-    // // Verify that a given plain password matches the hash
-    // $passwordHasher->verify($hash, 'wrong'); // returns false
-    // $passwordHasher->verify($hash, 'plain'); // returns true (valid)
-
-    
-    // $userPasswordHasher->hashPassword(
-    //     $user,
-    //     $data['password']
-    //     //$form->get('plainPassword')->getData()
-    // )
-    // );
-    // $user->setIsVerified(false);
 
     $entityManager->persist($user);
     $entityManager->flush();
+
+    $session = new Session();
+            // $session->start();
+    $session->set('email',$user->getEmail());
+    $session->set('id', $user->getId());
         
         // do anything else you need here, like send an email
 

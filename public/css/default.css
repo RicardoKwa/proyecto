@@ -9,7 +9,10 @@
     box-sizing: border-box;
 }
 
-
+html {
+    min-height: 100%;
+    position: relative;
+}
 
 body {
     width: 100%;
@@ -23,7 +26,7 @@ body {
 
 header {
     width: 100%;
-    min-height: 200px;
+    min-height: 160px;
     background-color: white;
     display:flex;
     flex-flow: row nowrap;
@@ -277,6 +280,16 @@ h1 {
     /* margin-bottom: 25px; */
 }
 
+.infoDiv > h1{
+    color:rgba(0, 106, 212, 0.764);
+}
+
+.bandera{
+    width: 50px;
+    height: 35px;
+    cursor:pointer;
+}
+
 
 /*--------------------------*\
   $select
@@ -499,7 +512,9 @@ button {
 
 
 
-
+#idioma{
+    display: none;
+}
     
 .divPisos > .foto {
     width: 100%;
@@ -589,7 +604,7 @@ font-family: 'Montserrat';
 
 .infoDiv{
     margin: 30px 5px;
-    width: 70%;
+    width: 75%;
     background-color: white;
     padding: 20px;
     /* border: 1px solid black; */
@@ -598,8 +613,8 @@ font-family: 'Montserrat';
 }
 
 .prueba > img{
-    width: 80%;
-    height: 30%;
+    width: 70%;
+    height: 25%;
     box-shadow: rgba(0, 0, 0, 0.5) 3px 3px 10px 0px;
 }
 /* 
@@ -638,7 +653,7 @@ font-family: 'Montserrat';
     margin: 10px 25px;
 }
 
-#Provincia,#Alquiler {
+#Provincia,#Alquiler,#Precio {
     background-color: rgba(255, 255, 127, 0.764);
     border-radius: 1px;
     min-width: fit-content;
@@ -912,7 +927,7 @@ list-style:none;
 .form2 {
     /* min-width: 30%; */
     width: 30%;
-    height: max-content;
+    height: 40%;
     margin-bottom: 40px;
     padding: 4em;
     background-color: white;
@@ -991,18 +1006,6 @@ list-style:none;
     justify-content: space-around;
     align-items: stretch;
     padding-bottom: 50px;
-}
-
-#res-right{
-    flex-flow: row nowrap;
-    justify-content: space-around;
-    align-items: center;
-    border: 1px solid black;
-}
-
-#imgForm{
-    max-width: 500px;
-    max-height: 500px;
 }
 
 
@@ -1267,19 +1270,7 @@ body a, body #test {
     margin-bottom: 20px;
 }
 
-.row-form-group{
-    display:flex;
-    flex-flow: row nowrap;
-    justify-content: space-around;
-    align-items: center;
-}
 
-.column-form-group{
-    display:flex;
-    flex-flow: column nowrap;
-    justify-content: space-between;
-    align-items: stretch;
-}
 
 
 
@@ -1325,4 +1316,128 @@ body a, body #test {
   justify-content: space-around;
   align-items: center;
   padding: 25px;   
+}
+
+
+
+
+
+
+
+
+#filtro{
+    color: white;
+}
+
+
+#wrap-piso-form{
+
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 20px 0px;
+    box-shadow: 0 0 6px 0 rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    width: 40%;
+    height: 40%;
+    margin: auto;
+    margin-bottom: 40px;
+    margin-top: 40px;
+    /* margin-left: 25%;
+    margin-top: 20px; */
+    z-index: 3;
+    /* position: relative; */
+    /* top: 50px; */
+    /* margin: auto; */
+    box-shadow: rgba(0, 0, 0, 0.5) 3px 3px 3px 0px;
+}
+
+
+#piso_form{
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: stretch;
+}
+
+#piso_form h3{
+    color: #000000;
+}
+
+.row-form-group{
+    display:flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.column-form-group{
+    display:flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.row-form-group *{
+
+    margin: 1px 8px;
+
+}
+
+
+
+.form-group{
+    margin: 10px 2px;
+    padding: 5px;
+    font-family: 'Montserrat';
+}
+
+#savePiso{
+    margin: auto;
+}
+
+
+
+
+
+#res-right{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: stretch;
+    border: 1px solid black;
+    height: max-content;
+    background-color: white;
+    width: 40%;
+    height: min-content;
+    padding: 10px;
+}
+
+
+#imgForm{
+    max-width: 100%;
+    max-height: 500px;
+}
+
+
+#res-right ul{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+    font-family: Montserrat;
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+#res-right li{
+    text-decoration: none;
+    display: inline-block;
+}
+
+#res-right h1{
+margin-top: 10px;
+color: rgba(0, 106, 212, 0.764);
 }
