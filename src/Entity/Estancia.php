@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Estancia
  *
- * @ORM\Table(name="estancia", indexes={@ORM\Index(name="id_reg", columns={"id_reg"}), @ORM\Index(name="id_car", columns={"id_car"}), @ORM\Index(name="id_ciudad", columns={"id_ciudad"})})
+ * @ORM\Table(name="estancia", indexes={@ORM\Index(name="id_car", columns={"id_car"}), @ORM\Index(name="id_ciudad", columns={"id_ciudad"}), @ORM\Index(name="id_reg", columns={"id_reg"}), @ORM\Index(name="id_img", columns={"id_img"})})
  * @ORM\Entity
  */
 class Estancia
@@ -42,13 +42,6 @@ class Estancia
      */
     private $fianza;
 
-    // /**
-    //  * @var bool
-    //  *
-    //  * @ORM\Column(name="disponible", type="boolean", nullable=false)
-    //  */
-    // private $disponible;
-
     /**
      * @var string
      *
@@ -56,29 +49,19 @@ class Estancia
      */
     private $direccion;
 
-    // /**
-    //  * @var \DateTime|null
-    //  *
-    //  * @ORM\Column(name="fecha_ini_d", type="datetime", nullable=true, options={"default"="CURRENT_TIMESTAMP"})
-    //  */
-    // private $fechaIniD = 'CURRENT_TIMESTAMP';
-
-    // /**
-    //  * @var \DateTime|null
-    //  *
-    //  * @ORM\Column(name="fecha_fin_d", type="datetime", nullable=true)
-    //  */
-    // private $fechaFinD;
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="latitud", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $latitud;
 
     /**
-     * @var \Ciudad
+     * @var float|null
      *
-     * @ORM\ManyToOne(targetEntity="Ciudad")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_ciudad", referencedColumnName="id_ciudad")
-     * })
+     * @ORM\Column(name="longitud", type="float", precision=10, scale=0, nullable=true)
      */
-    private $idCiudad;
+    private $longitud;
 
     /**
      * @var \CaracteristicasPiso
@@ -89,6 +72,26 @@ class Estancia
      * })
      */
     private $idCar;
+
+    /**
+     * @var \Imagenes
+     *
+     * @ORM\ManyToOne(targetEntity="Imagenes")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_img", referencedColumnName="id")
+     * })
+     */
+    private $idImg;
+
+    /**
+     * @var \Ciudad
+     *
+     * @ORM\ManyToOne(targetEntity="Ciudad")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_ciudad", referencedColumnName="id_ciudad")
+     * })
+     */
+    private $idCiudad;
 
     /**
      * @var \ConjuntoReglas
@@ -141,18 +144,6 @@ class Estancia
         return $this;
     }
 
-    // public function getDisponible(): ?bool
-    // {
-    //     return $this->disponible;
-    // }
-
-    // public function setDisponible(bool $disponible): self
-    // {
-    //     $this->disponible = $disponible;
-
-    //     return $this;
-    // }
-
     public function getDireccion(): ?string
     {
         return $this->direccion;
@@ -165,38 +156,26 @@ class Estancia
         return $this;
     }
 
-    // public function getFechaIniD(): ?\DateTimeInterface
-    // {
-    //     return $this->fechaIniD;
-    // }
-
-    // public function setFechaIniD(?\DateTimeInterface $fechaIniD): self
-    // {
-    //     $this->fechaIniD = $fechaIniD;
-
-    //     return $this;
-    // }
-
-    // public function getFechaFinD(): ?\DateTimeInterface
-    // {
-    //     return $this->fechaFinD;
-    // }
-
-    // public function setFechaFinD(?\DateTimeInterface $fechaFinD): self
-    // {
-    //     $this->fechaFinD = $fechaFinD;
-
-    //     return $this;
-    // }
-
-    public function getIdCiudad(): ?Ciudad
+    public function getLatitud(): ?float
     {
-        return $this->idCiudad;
+        return $this->latitud;
     }
 
-    public function setIdCiudad(?Ciudad $idCiudad): self
+    public function setLatitud(?float $latitud): self
     {
-        $this->idCiudad = $idCiudad;
+        $this->latitud = $latitud;
+
+        return $this;
+    }
+
+    public function getLongitud(): ?float
+    {
+        return $this->longitud;
+    }
+
+    public function setLongitud(?float $longitud): self
+    {
+        $this->longitud = $longitud;
 
         return $this;
     }
@@ -209,6 +188,30 @@ class Estancia
     public function setIdCar(?CaracteristicasPiso $idCar): self
     {
         $this->idCar = $idCar;
+
+        return $this;
+    }
+
+    public function getIdImg(): ?Imagenes
+    {
+        return $this->idImg;
+    }
+
+    public function setIdImg(?Imagenes $idImg): self
+    {
+        $this->idImg = $idImg;
+
+        return $this;
+    }
+
+    public function getIdCiudad(): ?Ciudad
+    {
+        return $this->idCiudad;
+    }
+
+    public function setIdCiudad(?Ciudad $idCiudad): self
+    {
+        $this->idCiudad = $idCiudad;
 
         return $this;
     }

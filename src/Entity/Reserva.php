@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Reserva
  *
- * @ORM\Table(name="reserva", indexes={@ORM\Index(name="id_est", columns={"id_est"}), @ORM\Index(name="id_cliente", columns={"id_cliente"})})
+ * @ORM\Table(name="reserva", indexes={@ORM\Index(name="id_cliente", columns={"id_cliente"}), @ORM\Index(name="id_est", columns={"id_est"})})
  * @ORM\Entity
  */
 class Reserva
@@ -29,16 +29,16 @@ class Reserva
     private $precioAlquiler;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      *
-     * @ORM\Column(name="fecha_inicio", type="date", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="fecha_inicio", type="date", nullable=true)
      */
-    private $fechaInicio = 'CURRENT_TIMESTAMP';
+    private $fechaInicio;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      *
-     * @ORM\Column(name="fecha_final", type="date", nullable=false)
+     * @ORM\Column(name="fecha_final", type="date", nullable=true)
      */
     private $fechaFinal;
 
@@ -50,16 +50,6 @@ class Reserva
     private $numeroCuenta;
 
     /**
-     * @var \Estancia
-     *
-     * @ORM\ManyToOne(targetEntity="Estancia")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_est", referencedColumnName="id_est")
-     * })
-     */
-    private $idEst;
-
-    /**
      * @var \User
      *
      * @ORM\ManyToOne(targetEntity="User")
@@ -68,6 +58,16 @@ class Reserva
      * })
      */
     private $idCliente;
+
+    /**
+     * @var \Estancia
+     *
+     * @ORM\ManyToOne(targetEntity="Estancia")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_est", referencedColumnName="id_est")
+     * })
+     */
+    private $idEst;
 
     public function getIdRes(): ?string
     {
@@ -91,7 +91,7 @@ class Reserva
         return $this->fechaInicio;
     }
 
-    public function setFechaInicio(\DateTimeInterface $fechaInicio): self
+    public function setFechaInicio(?\DateTimeInterface $fechaInicio): self
     {
         $this->fechaInicio = $fechaInicio;
 
@@ -103,7 +103,7 @@ class Reserva
         return $this->fechaFinal;
     }
 
-    public function setFechaFinal(\DateTimeInterface $fechaFinal): self
+    public function setFechaFinal(?\DateTimeInterface $fechaFinal): self
     {
         $this->fechaFinal = $fechaFinal;
 
@@ -122,18 +122,6 @@ class Reserva
         return $this;
     }
 
-    public function getIdEst(): ?Estancia
-    {
-        return $this->idEst;
-    }
-
-    public function setIdEst(?Estancia $idEst): self
-    {
-        $this->idEst = $idEst;
-
-        return $this;
-    }
-
     public function getIdCliente(): ?User
     {
         return $this->idCliente;
@@ -142,6 +130,18 @@ class Reserva
     public function setIdCliente(?User $idCliente): self
     {
         $this->idCliente = $idCliente;
+
+        return $this;
+    }
+
+    public function getIdEst(): ?Estancia
+    {
+        return $this->idEst;
+    }
+
+    public function setIdEst(?Estancia $idEst): self
+    {
+        $this->idEst = $idEst;
 
         return $this;
     }

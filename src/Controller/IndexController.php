@@ -33,7 +33,7 @@ public function inicio(Request $request) {
        return $this->render('proyecto.html.twig',array());
        
 }
-     
+  
 /**
      * @Route("/pisos", methods={"GET"})
      * @param Request $request
@@ -42,11 +42,6 @@ public function inicio(Request $request) {
      */
 public function pisos(Request $request , EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
     
-    // $request = Request::createFromGlobals();
-
-// the URI being requested (e.g. /about) minus any query parameters
-    // $request->getPathInfo();
-
     $nombre = $request->query->get('ciudad');
     
     $queryId=$entityManager->createQuery("select c.idCiudad from App\Entity\Ciudad c WHERE c.nombre = :nombre");
@@ -77,48 +72,6 @@ public function car(EntityManagerInterface $entityManager , SerializerInterface 
 
 
 /**
- * @Route("/register", methods={"POST"})
- * @return JsonResponse
- * @throws \Exception
- */
-public function register(Request $request,EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): JsonResponse
-{   
-
-    $factory = new PasswordHasherFactory([
-        'common' => ['algorithm' => 'bcrypt'],
-        'memory-hard' => ['algorithm' => 'sodium'],
-    ]);
-    $passwordHasher = $factory->getPasswordHasher('common');
-
-    $data  = json_decode(file_get_contents('php://input'), true);        
-   
-    $user = new User();
-    $user->setEmail($data['email']);
-    $user->setNombre($data['nombre']);
-    $user->setPApellido($data['papellido']);
-    $user->setSApellido($data['sapellido']);   
-    $user->setRoles(array('ROLE_USER'));
-    // $user->setPassword( $data['password']);
-    $hash = $passwordHasher->hash($data['password']);
-    $user->setPassword($hash);
-        
-
-    $entityManager->persist($user);
-    $entityManager->flush();
-
-    $session = new Session();
-            // $session->start();
-    $session->set('email',$user->getEmail());
-    $session->set('id', $user->getId());
-        
-        // do anything else you need here, like send an email
-
-    return new JsonResponse($data['nombre'], Response::HTTP_OK, [], true); //modificar , voy a devolver un json o un string
-    //}
-
-}
-
-/**
  * @Route("/reservar", methods={"POST"})
  * @return JsonResponse
  * @throws \Exception
@@ -138,44 +91,23 @@ public function reservar(Request $request,EntityManagerInterface $entityManager)
     $reserva->setFechaInicio($inicio);
     $reserva->setFechaFinal($fin);
     $reserva->setNumeroCuenta($data['numtarjeta']);
+    $user->setTelefono($data['tel']);
     $reserva->setIdCliente($user);
     $reserva->setIdEst($estancia);
 
     try {
         $entityManager->persist($reserva);
+        $entityManager->persist($user);
         $entityManager->flush();
     } catch (\Exception $e) {
         
         return new JsonResponse("Error", Response::HTTP_OK, [], true);
 
     }
-    // return new JsonResponse($data['pisoId'], Response::HTTP_OK, [], true);
     
     return new JsonResponse($reserva->getNumeroCuenta(), Response::HTTP_OK, [], true);
-    // if($entityManager->persist($reserva)){
-        
-        
-    // }else{
-    //     return new JsonResponse("Error", Response::HTTP_OK, [], true);
-    // }
-    
-    
-        
-        // do anything else you need here, like send an email
-
-     //modificar , voy a devolver un json o un string
-    //}
 
 }
-
-    
-//  }
-
-
-//  public function checkPassword($password, UserInterface $user): bool
-//  {
-//      return $this->passwordEncoder->isPasswordValid($user, $password);
-//  }
 
 
 /**
@@ -186,17 +118,8 @@ public function reservar(Request $request,EntityManagerInterface $entityManager)
      */
     public function getReservas(Request $request , EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
     
-        // $request = Request::createFromGlobals();
-    
-    // the URI being requested (e.g. /about) minus any query parameters
-        // $request->getPathInfo();
         $session = $request->getSession();
         $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $session->get('email')]);
-        // $nombre = $request->query->get('ciudad');
-        
-        // $queryId=$entityManager->createQuery("select c.idCiudad from App\Entity\Ciudad c WHERE c.nombre = :nombre");
-        // $queryId->setParameter('nombre', $nombre);          
-        // $id_ciudad = $queryId->getResult();
     
         $queryReservas=$entityManager->createQuery("select e from App\Entity\Reserva e WHERE e.idCliente = :user");
         $queryReservas->setParameter('user', $user);
@@ -217,18 +140,23 @@ public function reservar(Request $request,EntityManagerInterface $entityManager)
  */
     public function filtro(Request $request , EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
     
-        // $request = Request::createFromGlobals();
+
         $data  = json_decode(file_get_contents('php://input'), true);        
         
-        // $nombre = $data['city'];
         $tipo = $data['tipo'];
         $ciudad = $entityManager->getRepository(Ciudad::class)->findOneBy(['nombre' => $data['city']]);
+        $precio = $data['precio'];
 
-        // $queryId=$entityManager->createQuery("select c.idCiudad from App\Entity\Ciudad c WHERE c.nombre = :nombre");
-        // $queryId->setParameter('nombre', $nombre);          
-        // $id_ciudad = $queryId->getResult();
-    
-        $queryPisos=$entityManager->createQuery("select e from App\Entity\Estancia e WHERE e.idCiudad = :ciudad AND e.tipoEst = :tipo");
+        if($precio == "500"){
+            $queryPisos=$entityManager->createQuery("select e from App\Entity\Estancia e WHERE e.idCiudad = :ciudad AND e.tipoEst = :tipo AND e.precioMes < 500");
+        }elseif($precio == "999"){
+            $queryPisos=$entityManager->createQuery("select e from App\Entity\Estancia e WHERE e.idCiudad = :ciudad AND e.tipoEst = :tipo AND e.precioMes < 1000");
+        }elseif($precio == "1000"){
+            $queryPisos=$entityManager->createQuery("select e from App\Entity\Estancia e WHERE e.idCiudad = :ciudad AND e.tipoEst = :tipo AND e.precioMes > 1000");
+        }else{
+            $queryPisos=$entityManager->createQuery("select e from App\Entity\Estancia e WHERE e.idCiudad = :ciudad AND e.tipoEst = :tipo");
+        }
+        
         $queryPisos->setParameter('ciudad', $ciudad);
         $queryPisos->setParameter('tipo', $tipo);
         $pisos = $queryPisos->getResult();
@@ -247,19 +175,16 @@ public function reservar(Request $request,EntityManagerInterface $entityManager)
  */
 public function disponibilidad(Request $request , EntityManagerInterface $entityManager) {
     
-    // $request = Request::createFromGlobals();
     $data  = json_decode(file_get_contents('php://input'), true);        
     
     $estancia = $entityManager->getRepository(Estancia::class)->findOneBy(['idEst' => $data['pisoId']]);
     $inicio = \DateTime::createFromFormat('Y-m-d', $data['dateIn']); 
     $fin = \DateTime::createFromFormat('Y-m-d', $data['dateFin']); 
-    // $nombre = $data['city'];
     
     $reservas = $entityManager->getRepository(Reserva::class)->findBy(['idEst' => $estancia]);
     
     if (sizeof($reservas) == 0) {
         return new JsonResponse('Disponible', Response::HTTP_OK, [], true); 
-        // return $this->errorJsonResponse('users with given ids not found');///COPIAR ESE ERRORJSON Y LUEGO CAMBIAR
     }
     else{
     

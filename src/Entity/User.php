@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * User
  *
- * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQ_8D93D649E7927C74", columns={"email"})})
+ * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})})
  * @ORM\Entity
  */
 class User
@@ -45,9 +45,16 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=180, nullable=false)
+     * @ORM\Column(name="email", type="string", length=100, nullable=false)
      */
     private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
+     */
+    private $password;
 
     /**
      * @var array
@@ -57,18 +64,11 @@ class User
     private $roles;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="password", type="string", length=255, nullable=false)
+     * @ORM\Column(name="Telefono", type="string", length=20, nullable=true)
      */
-    private $password;
-
-    // /**
-    //  * @var bool|null
-    //  *
-    //  * @ORM\Column(name="isVerified", type="boolean", nullable=true, options={"default"="b'0'"})
-    //  */
-    // private $isverified = 'b\'0\'';
+    private $telefono;
 
     public function getId(): ?string
     {
@@ -123,18 +123,6 @@ class User
         return $this;
     }
 
-    public function getRoles(): ?array
-    {
-        return $this->roles;
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
     public function getPassword(): ?string
     {
         return $this->password;
@@ -147,17 +135,29 @@ class User
         return $this;
     }
 
-    // public function getIsverified(): ?bool
-    // {
-    //     return $this->isverified;
-    // }
+    public function getRoles(): ?array
+    {
+        return $this->roles;
+    }
 
-    // public function setIsverified(?bool $isverified): self
-    // {
-    //     $this->isverified = $isverified;
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
-    //     return $this;
-    // }
+        return $this;
+    }
+
+    public function getTelefono(): ?string
+    {
+        return $this->telefono;
+    }
+
+    public function setTelefono(?string $telefono): self
+    {
+        $this->telefono = $telefono;
+
+        return $this;
+    }
 
 
 }

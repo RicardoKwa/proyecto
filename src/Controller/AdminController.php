@@ -1,5 +1,4 @@
 <?php
-//src/Controller/IndexController.php
 namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,14 +33,8 @@ class AdminController extends AbstractController {
      * @throws \Exception
      */
     public function getAllReservas(Request $request , EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
-    
-        // $session = $request->getSession();
-        // $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $session->get('email')]);
-        
+
         $reservas = $entityManager->getRepository(Reserva::class)->findAll();
-        // $queryReservas=$entityManager->createQuery("select e from App\Entity\Reserva e");
-        // $reservas = $queryReservas->getResult();
-            
         $data = $serializer->serialize($reservas, JsonEncoder::FORMAT);
         return new JsonResponse($data, Response::HTTP_OK, [], true); 
     }
@@ -58,9 +51,6 @@ public function getAllpisos(Request $request , EntityManagerInterface $entityMan
     
 
     $pisos = $entityManager->getRepository(Estancia::class)->findAll();
-    // $queryPisos=$entityManager->createQuery("select e from App\Entity\Estancia e");
-    // $pisos = $queryPisos->getResult();
-        
     $data = $serializer->serialize($pisos, JsonEncoder::FORMAT);
     return new JsonResponse($data, Response::HTTP_OK, [], true); 
 }
@@ -73,17 +63,7 @@ public function getAllpisos(Request $request , EntityManagerInterface $entityMan
 */
 public function getAllUser(Request $request , EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
     
-
     $Users = $entityManager->getRepository(User::class)->findAll();
-    // $queryPisos=$entityManager->createQuery("select e from App\Entity\Estancia e");
-    // $pisos = $queryPisos->getResult();
-    // foreach ($Users as $user) {
-    //     // $rol = $user->getRoles();
-    //     // if($rol[0] == 'ROLE_ADMIN'){
-    //     unset($user);
-    //     // }
-    // }
-        
     $data = $serializer->serialize($Users, JsonEncoder::FORMAT);
     return new JsonResponse($data, Response::HTTP_OK, [], true); 
 }
@@ -98,14 +78,14 @@ public function getAllUser(Request $request , EntityManagerInterface $entityMana
     public function deleteReserva(Request $request , EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
         
         $id_reserva = $request->query->get('id');
-        // $input  = json_decode(file_get_contents('php://input'), true);             
-        $reserva = $entityManager->getRepository(Reserva::class)->findOneBy(['id' => $id_reserva]);
-        // if ($reserva != null){
+      
+        $reserva = $entityManager->getRepository(Reserva::class)->findOneBy(['idRes' => $id_reserva]);
+
         $entityManager->remove($reserva);
         $entityManager->flush();
 
         return new JsonResponse('Reserva eliminada', Response::HTTP_OK, [], true);     
-        // $data = $serializer->serialize($user, JsonEncoder::FORMAT);
+
     }
   
     /**
@@ -116,37 +96,14 @@ public function getAllUser(Request $request , EntityManagerInterface $entityMana
      */
     public function deletePiso(Request $request , EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
         
-        $id_piso = $request->query->get('id');
-        // $input  = json_decode(file_get_contents('php://input'), true);             
+        $id_piso = $request->query->get('id');           
         $piso = $entityManager->getRepository(Estancia::class)->findOneBy(['idEst' => $id_piso]);
-        // $estancia = $entityManager->getRepository(Estancia::class)->findOneBy(['idEst' => $data['pisoId']]);
-        // if ($reserva != null){
         $entityManager->remove($piso);
         $entityManager->flush();
 
         return new JsonResponse('Piso eliminado', Response::HTTP_OK, [], true);     
-        // $data = $serializer->serialize($user, JsonEncoder::FORMAT);
     }
     
-    // /**
-    //  * @Route("/deletepiso", methods={"GET"})
-    //  * @param Request $request
-    //  * @return JsonResponse
-    //  * @throws \Exception
-    //  */
-    // public function deletePiso(Request $request , EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
-        
-    //     $id_piso = $request->query->get('id');
-    //     // $input  = json_decode(file_get_contents('php://input'), true);             
-    //     $piso = $entityManager->getRepository(Estancia::class)->findOneBy(['id' => $id_piso]);
-    //     // if ($reserva != null){
-    //     $entityManager->remove($piso);
-    //     $entityManager->flush();
-
-    //     return new JsonResponse('Piso eliminado', Response::HTTP_OK, [], true);     
-    //     // $data = $serializer->serialize($user, JsonEncoder::FORMAT);
-    // }
-
 /**
      * @Route("/newpiso", methods={"POST"})
      * @param Request $request
@@ -165,12 +122,13 @@ public function getAllUser(Request $request , EntityManagerInterface $entityMana
         $piso->setDireccion($data['direccion']);
         $piso->setIdCar($data['car']);
         $piso->setIdReg($data['reglas']);
+        $piso->setLatitud(floatval($data['lat']));
+        $piso->setLongitud(floatval($data['long']));
         
         $entityManager->persist($user);
         $entityManager->flush();
 
         return new JsonResponse('Piso creado', Response::HTTP_OK, [], true);     
-        // $data = $serializer->serialize($user, JsonEncoder::FORMAT);
     }
 
     
@@ -210,7 +168,6 @@ public function getAllUser(Request $request , EntityManagerInterface $entityMana
         $entityManager->flush();
 
         return new JsonResponse('Cliente editado', Response::HTTP_OK, [], true);     
-        // $data = $serializer->serialize($user, JsonEncoder::FORMAT);
     }
     
 
@@ -222,17 +179,13 @@ public function getAllUser(Request $request , EntityManagerInterface $entityMana
      */
     public function deleteCliente(Request $request , EntityManagerInterface $entityManager , SerializerInterface $serializer ) {
         
-        $id_cliente = $request->query->get('id');
-        // $input  = json_decode(file_get_contents('php://input'), true);             
+        $id_cliente = $request->query->get('id');            
         $user = $entityManager->getRepository(User::class)->findOneBy(['id' => $id_cliente]);
         $email = $user->getEmail();
-        // $estancia = $entityManager->getRepository(Estancia::class)->findOneBy(['idEst' => $data['pisoId']]);
-        // if ($reserva != null){
         $entityManager->remove($user);
         $entityManager->flush();
 
         return new JsonResponse('Usuario: ' + $email + 'eliminado', Response::HTTP_OK, [], true);     
-        // $data = $serializer->serialize($user, JsonEncoder::FORMAT);
     }
     
     /**
@@ -298,8 +251,6 @@ public function getAllUser(Request $request , EntityManagerInterface $entityMana
         $data  = json_decode(file_get_contents('php://input'), true);  
         
         $ciudad = $entityManager->getRepository(Ciudad::class)->findOneBy(['idCiudad' => intval($data['city'])]);
-        // $car = $entityManager->getRepository(CaracteristicasPiso::class)->findOneBy(['idCar' => 1]);
-        // $reg = $entityManager->getRepository(ConjuntoReglas::class)->findOneBy(['idReg' => 1]);
 
         if($data['playa'] == "Si"){
             if($data['car'] == "completo"){
@@ -328,6 +279,12 @@ public function getAllUser(Request $request , EntityManagerInterface $entityMana
         }else{
             $piso = $entityManager->getRepository(Estancia::class)->findOneBy(['idEst' => intval($data['idPiso'])]);
         }
+
+        //imagenes
+
+        $queryImagenes=$entityManager->createQuery("select e from App\Entity\Imagenes e WHERE e.nombre = :nombre");
+        $queryImagenes->setParameter('nombre', $data['im']);
+        $imagenes = $queryImagenes->getResult();
         
         $piso->setTipoEst($data['tipo']);
         $piso->setDireccion($data['dir']);
@@ -336,12 +293,18 @@ public function getAllUser(Request $request , EntityManagerInterface $entityMana
         $piso->setIdCiudad($ciudad);
         $piso->setIdCar($car);
         $piso->setIdReg($reglas[0]);
+        $piso->setLatitud(floatval($data['lat']));
+        $piso->setLongitud(floatval($data['long']));
+        if(!empty($imagenes)){
+            $piso->setIdImg($imagenes[0]);
+        }else{
+            return new JsonResponse("No Image", Response::HTTP_OK, [], true);     
+        }
 
         $entityManager->persist($piso);
         $entityManager->flush();
 
-        return new JsonResponse("tttttt", Response::HTTP_OK, [], true);     
-        // $data = $serializer->serialize($user, JsonEncoder::FORMAT);
+        return new JsonResponse("OK", Response::HTTP_OK, [], true);     
     }
     
 }

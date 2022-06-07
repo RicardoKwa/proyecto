@@ -4,24 +4,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Grape+Nuts&family=Merriweather:ital,wght@1,300&family=Open+Sans&display=swap');
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 * {
-    margin: 0px;
-    padding: 0px;
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    
 }
 
 html {
-    min-height: 100%;
-    position: relative;
+    height: 100%;
 }
 
 body {
-    width: 100%;
-    height: 100%;
-    background-color: rgb(255, 255, 141);
+    
+    min-height: 100%;
     display: flex;
     flex-flow: column nowrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: stretch;
+    background-color: rgb(255, 255, 141);
 }
 
 header {
@@ -63,17 +63,6 @@ header > ol > li:hover {
     display: none;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 #menu-admin {
     position: relative;
     display: none;
@@ -90,11 +79,6 @@ header > ol > li:hover {
     border-radius: 0px;
     cursor: pointer;
 }
-
-/* .menu-btn:hover {
-
-    cursor: pointer;
-} */
 
 #menu-admin ul {
     display: none;
@@ -131,11 +115,6 @@ header > ol > li:hover {
 }
 
 
-
-        
-       
-
-
 #imgLogo {
     width: 110px;
     height: 110px;    
@@ -159,27 +138,6 @@ header > ol > li:hover {
     display: none;
 }
 
-/* #Login {
-    width: 90px;
-    height: 50px;
-    position: relative;
-    left: 80%;
-    top: -50%;
-    border-radius: 10px;
-    text-align: center;
-    background-color: rgb(255, 255, 127);
-    padding: 5px;
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    align-items: center;
-    cursor:pointer;
-}
-
-#Login>div {
-    font-family: 'Montserrat';
-    color: black;
-} */
 
 h1 {
     text-align: center;
@@ -262,10 +220,6 @@ h5 {
 footer {
     width: 100%;
     min-height: 300px;
-    /* fallback for old browsers */
-    /* background: -webkit-linear-gradient(to bottom, #000000, #434343);
-    /* Chrome 10-25, Safari 5.1-6
-    background: linear-gradient(to bottom, #000000, #434343); */
     background-color: white;
     display: flex;
     flex-flow: column nowrap;
@@ -348,12 +302,7 @@ h5 {
     border-radius: 10px;
     width: 30%;
     height: auto;
-    /* margin-left: 25%;
-    margin-top: 20px; */
     z-index: 3;
-    /* position: relative; */
-    /* top: 50px; */
-    /* margin: auto; */
     box-shadow: rgba(0, 0, 0, 0.5) 3px 3px 3px 0px;
 }
 
@@ -414,9 +363,6 @@ button {
     border: 0;
     outline: none;
     background-color: rgb(255, 255, 127);
-    /*
-    background-image: linear-gradient(to right, #b993d6, #8ca6db);
-    */
     font-size: 15px;
     font-family: 'Montserrat', 'sans serif';
     display: inline-block;
@@ -442,9 +388,6 @@ button {
     border: 1px solid black;
     margin-top: 20px;
 }
-
-
-
 
 /* ZONAPISOS*/
 #zonaPisos{
@@ -607,7 +550,6 @@ font-family: 'Montserrat';
     width: 75%;
     background-color: white;
     padding: 20px;
-    /* border: 1px solid black; */
     border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.5) 3px 3px 10px 0px;
 }
@@ -617,12 +559,7 @@ font-family: 'Montserrat';
     height: 25%;
     box-shadow: rgba(0, 0, 0, 0.5) 3px 3px 10px 0px;
 }
-/* 
-#buscador{
-    position: relative;
-    top: -300px;
-    left: 0%;
-} */
+
 
 #fondo{
     width: 100%;
@@ -678,24 +615,19 @@ font-family: 'Montserrat';
 #titulosFooter {
     width: 100%;
     min-height: 60px;
-    /* background-color: aliceblue; */
     display: flex;
     flex-grow: row nowrap;
     align-items: center;
     justify-content:space-around;
     color: white;
-    /* color: rgb(255, 255, 127); */
     background-color: black;
     font-family: 'Montserrat';
 }
-#titulosFooter *{
-margin : 5px 180px;
-}
+
 
 #footerListas {
     width: 100%;
     min-height:max-content;
-    /* background-color:aliceblue; */
     display: flex;
     flex-flow: row wrap;
     align-items: center;
@@ -739,7 +671,6 @@ list-style:none;
 #btReservar{
     padding: 10px 15px;
     min-width: fit-content;
-    /* border: 1px solid black; */
     background-color: rgba(0, 106, 212, 0.764);
     color: white;
     border-radius: 1px;
@@ -786,10 +717,6 @@ list-style:none;
     min-height: 100%;
     max-width: 20%;
     min-width: 10%;
-    /* display: flex;
-    flex-flow: column nowrap;
-    justify-content: flex-start;
-    align-items: center; */
 }
 
 #infoRight > div{
@@ -805,7 +732,6 @@ list-style:none;
     flex-flow:column nowrap;
     justify-content: space-around;
     align-items: center;
-    /* box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 0px 0px; */
     border: 3px solid rgba(114, 114, 114, 0.764);
 
  
@@ -864,8 +790,6 @@ list-style:none;
     font-family: 'Montserrat', 'sans serif';
     padding: 15px;
     font-size: 1.3rem;
-    /* width: 60%; */
-    /* min-height: 100%; */
 }
 
 .fotoReservado{
@@ -882,13 +806,6 @@ list-style:none;
     max-height: 40px;
     background-color: rgba(0, 106, 212, 0.764);
 }
-
-
-
-
-
-
-
 
 
 
@@ -1012,8 +929,9 @@ list-style:none;
 #double-input{
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-around;
-    align-items: center;
+    justify-content: stretch;
+    align-items: stretch;
+    width: 100%;
 }
 
 #double-input:first-child {
@@ -1032,16 +950,8 @@ list-style:none;
 }
 
 
-
-
-
-
 .alert-message {line-height:20px; font-size:15px;padding-bottom: 12px;}
-/* h1{color:#e35154 !important; font-size:18px; margin-left:20px; margin-bottom:20px;font-weight:700; text-transform: uppercase;}
 
-body a, body #test {
-  color: #fff;
-} */
 
 .unstyled {
   margin: 0;
@@ -1187,7 +1097,6 @@ body a, body #test {
     justify-content: space-between;
     align-items: center;
     background-color: white;
-    /*margin: 10px 5px ; */
     border-bottom: 2px solid black;
     padding: 10px;
 }
@@ -1255,13 +1164,8 @@ body a, body #test {
   margin: 3px;
 }
 
-
-
-
-
 #admin-forms{
-    /* min-width:400px;
-    min-height: 400px; */
+
     font-size: 1.3rem;
     display: flex;
     flex-flow: column nowrap;
@@ -1269,11 +1173,6 @@ body a, body #test {
     align-items: center;
     margin-bottom: 20px;
 }
-
-
-
-
-
 
 
 
@@ -1287,15 +1186,10 @@ body a, body #test {
     align-items: center;
 }
 
-/* #admin-forms .form input{
-    margin: auto;
-    size: 60;
-} */
-
 .listado-top{
     display:flex;
     flex-flow: row wrap;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     padding: 10px;
     background-color: #000000;
@@ -1345,12 +1239,8 @@ body a, body #test {
     margin: auto;
     margin-bottom: 40px;
     margin-top: 40px;
-    /* margin-left: 25%;
-    margin-top: 20px; */
     z-index: 3;
-    /* position: relative; */
-    /* top: 50px; */
-    /* margin: auto; */
+
     box-shadow: rgba(0, 0, 0, 0.5) 3px 3px 3px 0px;
 }
 
@@ -1441,3 +1331,162 @@ body a, body #test {
 margin-top: 10px;
 color: rgba(0, 106, 212, 0.764);
 }
+
+
+#cvc{
+    margin-left:2px;
+}
+
+#caducidad-tarjeta{
+    width: 150%;
+}
+
+
+#btfiltro{
+    padding: 0px 10px;
+    width: max-content;
+    margin: 0 5px;
+}
+
+#btNewPiso{
+    padding: 0px 10px;
+    width: max-content;
+}
+
+
+
+
+
+
+@media (min-width: 300px) and (max-width: 800px) {
+   
+  
+#bus1{
+
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.02rem;
+
+}
+  
+.swiper {
+    width: 100%;
+}
+
+header {
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+
+header > ol a{
+    text-decoration: none;
+    color: black;
+    font-size: 0.8rem;
+    font-family: 'Montserrat';
+}
+
+#textSlide{
+    font-size: 1.5rem;
+}
+
+.divPisos {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: stretch;
+    font-size: 0.9rem;
+
+}
+
+#btForm,#btExit{
+    /* padding: 12px 15px; */
+    min-width: 90px;
+    font-size: 0.9rem;
+    flex-flow: row nowrap;
+
+}
+
+
+#imgLogo {
+    width: 90px;
+    height: 90px;    
+}
+
+#zonaInfo{
+
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    min-width: 100%;
+    padding: 10px;
+}
+
+#infoRight{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+#infoRight > div{
+    height: 180px;
+    width: 200px;
+    position: static;
+    padding: 12px;
+    margin: auto;
+ 
+}
+
+#titulosFooter {
+    font-size: 0.8rem;
+}
+
+#info ul{
+    font-size: 0.9rem;
+    flex-flow: column wrap;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+#info h1{
+    font-size: 0.9rem;
+}
+
+#footerListas li{
+    font-size: 0.9rem;
+    margin: 7px;
+    }
+    
+    #footerListas a,#footerListas>ol>li{
+        font-size: 0.9rem;
+    }
+    
+    #footerListas i{
+        font-size: 1rem;
+        margin-right: 3px;
+    }
+    
+    
+    #footerListas li:hover{
+        font-size: 0.9rem;
+    }
+    
+
+    .form {
+
+        padding: 10px 0px;
+
+        width: 80%;
+
+    }
+
+
+
+}
+

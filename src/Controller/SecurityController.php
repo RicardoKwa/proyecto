@@ -18,7 +18,6 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
-// use App\Manager\AuthManager;
 class SecurityController extends AbstractController
 {
 
@@ -27,7 +26,7 @@ class SecurityController extends AbstractController
  * @return JsonResponse
  * @throws \Exception
  */
-// #[Route(path: '/login', name: 'app_login')]
+
 public function login(Request $request , EntityManagerInterface $entityManager ,UserPasswordHasherInterface $userPasswordHasher)
  {   
 
@@ -47,13 +46,10 @@ public function login(Request $request , EntityManagerInterface $entityManager ,
      if($user){
         
         $hash = $user->getPassword();
-        // $passwordHasher->verify($hash,$password);
+
         if ($passwordHasher->verify($hash,$password)) {
-            // error, you can't change your password 
-            // throw exception or return, etc.
             $roles = $user->getRoles();
             $session = new Session();
-            // $session->start();
             $session->set('email',$username);
             $session->set('id', $user->getId());
             if($roles[0] == 'ROLE_ADMIN'){
@@ -62,7 +58,6 @@ public function login(Request $request , EntityManagerInterface $entityManager ,
                 return new JsonResponse($session->get('email'), Response::HTTP_OK, [], true); 
             }  
          }
-        //checkPassword($password,$user);
         return new JsonResponse('PasswordError', Response::HTTP_OK, [], true); 
      }else{
         return new JsonResponse('UserError', Response::HTTP_OK, [], true); 
@@ -72,34 +67,47 @@ public function login(Request $request , EntityManagerInterface $entityManager ,
  }
 
 
-    // #[Route(path: '/login', name: 'app_login')]
-    // public function login(Request $request, SessionInterface $session)
-    // {
-    //     //$password = $request->get('password');
-    //     $email = $request->get('email');
+ /**
+ * @Route("/register", methods={"POST"})
+ * @return JsonResponse
+ * @throws \Exception
+ */
+public function register(Request $request,EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): JsonResponse
+{   
 
-    //     if (!$name || !$email) {
-    //         return new Response('Data is not provided', 500);
-    //     }
+    $factory = new PasswordHasherFactory([
+        'common' => ['algorithm' => 'bcrypt'],
+        'memory-hard' => ['algorithm' => 'sodium'],
+    ]);
+    $passwordHasher = $factory->getPasswordHasher('common');
 
-    //     /** @var User $user */
-    //     $user = $this->getDoctrine()
-    //         ->getRepository(User::class)
-    //         ->findOneBy([
-    //             'email' => $email
-    //         ]);
+    $data  = json_decode(file_get_contents('php://input'), true);        
+    
+    $check = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+    if(empty($check)){
+        $user = new User();
+        $user->setEmail($data['email']);
+        $user->setNombre($data['nombre']);
+        $user->setPApellido($data['papellido']);
+        $user->setSApellido($data['sapellido']);   
+        $user->setRoles(array('ROLE_USER'));
+        $hash = $passwordHasher->hash($data['password']);
+        $user->setPassword($hash);
+            
+    
+        $entityManager->persist($user);
+        $entityManager->flush();
+    
+        $session = new Session();
+        $session->set('email',$user->getEmail());
+        $session->set('id', $user->getId());
+    
+        return new JsonResponse("OK", Response::HTTP_OK, [], true);
+    }else{
+        return new JsonResponse("Este email ya está registrado", Response::HTTP_OK, [], true);
+    }
 
-    //     if (!$user) {
-    //         return new Response('Wrong parameters', 500);
-    //     }
-
-    //     $session->set('user_id', $user->getId());
-
-    //     // TODO: add event for auth user user.auth.after
-
-    //     return new JsonResponse($user->toArray());
-    // }
-
+}
 
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
