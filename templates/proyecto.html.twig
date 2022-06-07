@@ -29,37 +29,12 @@
     <header>
 
         <img id="imgLogo" src="{{ asset('images/proyecto/logo/LogoDomus.jpg') }}" alt="Symfony!" />
-
-        <!-- INICIO MENU -->
-
-       {# <ul class="list unstyled">
-  <li><a href="#" onclick="Alert.success('Success! This alert box indicates a successful or positive action. ','Success',{displayDuration: 3000, pos: 'top'})">Success Alert</a></li>
-  
-  <li><a href="#" onclick="Alert.info('Info! This alert box indicates a neutral informative change or action. ','Info',{displayDuration: 3000})">Info Alert</a></li>
-  
-  <li><a href="#" onclick="Alert.error('error! This alert box indicates a dangerous or potentially negative action. ','Error',{displayDuration: 3000})">Error Alert</a></li>
-  
-  <li><a href="#" onclick="Alert.warning('Warning! This alert box indicates a warning that might need attention.','Warning',{displayDuration: 3000})">Warning Alert</a></li>
-  
-<li><a href="#" onclick="Alert.trash('Delete! This alert box indicates a dangerous or potentially negative action. ','Delete',{displayDuration: 3000})">Delete Alert</a></li>
-  
-  <li> <br><br><br> </li>
-  <!--<li id="test"> Demo </li>-->
-</ul> #}
-
         
         <ol id="menu">
             <li><a href="">Nosotros</a></li>
             <li><a href="#">Home</a></li>
             <li><a href="#">Contacto</a></li>
             <li id="li-user"><a href="#">Mis Reservas</a></li>
-            {# <li id="li-admin"><a href="#">Administración</a>
-                <ul>
-                    <li><a href="#">Clientes</li></a>
-                    <li><a href="#">Reservas</li></a>
-                    <li><a href="#">Pisos</li></a>
-                </ul>            
-                </li> #}
             <nav id="menu-admin">
             <button id="admin-btn">Administración</button>
             <ul>
@@ -103,9 +78,9 @@
                  {# <h12>Dinero</h12> #}
                 <select name="Precio" id="Precio">
                        
-                       <option value="0-500€">Menos 500€</option>
-                       <option value="501-1000€">500-1000€</option>
-                       <option value="1001-2000€">Más 1000€</option>
+                       <option value="500">Menos 500€</option>
+                       <option value="999">Menos 1000€</option>
+                       <option value="1000">Más 1000€</option>
                        <option value="Todos">Todos</option>
                       
                    
@@ -272,39 +247,26 @@
       </div>
       <div class="input-group">
          <input type="text" id="dateFin" placeholder="Fin" required>
-         {# <input type="text" placeholder="Smith" name="lastname" id="lastname"> #}
       </div>
    </div>
 
-    {# pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" #}
    <div class="step step2 hidden">
-      {# <div id = "payData"> #}
             <div class="input-group">
             <label for="data payment">Pago</label>
-         {# <label for="firstname">Número de tarjeta</label> #}
-        {# <input id="numero-tarjeta" type="text" data-format="****-****-****-****" data-mask="####-####-####-####"> #}
         <input id="numero-tarjeta" name="tarjeta" type="text"placeholder="Numero de Tarjeta">
       </div>
 
             <div class="input-group">
-            {# <label for="cc-number" class="text-xs tracking-wide uppercase font-semibold">Caducidad</label> #}
               <div id ="double-input">
-              {# <input type="text" data-format="**/**" data-mask="MM/YY">
-              <input type="text" data-format="***" data-mask="###"> #}
               <input type="text" id ="caducidad-tarjeta" name="caducidad-tarjeta" placeholder = "Caducidad MM/YY">
-              <input type="text" name="cvc" placeholder = "CVC">
+              <input type="text" id ="cvc" name="cvc" placeholder = "CVC">
               </div>           
             </div>
    </div>
 
    <div class="step step3 hidden">
-      {# <div class="input-group">
-         <label for="address">Address</label>
-         <input type="text" placeholder="221B Baker Street" name="address" id="address">
-      </div>  #}
       <div class="input-group">
       <label for="contact">Contacto</label>
-         {# <label for="phone">Teléfono</label> #}
          <input type="text" name="phone" id="phone-res" placeholder="Teléfono">
       </div>
    </div>
@@ -341,13 +303,12 @@
  
       <form id="piso_form">
       
-       <h1>Nuevo Piso</h1>
+       <h1 id="piso_form_titulo">Nuevo Piso</h1>
 
         <div class="form-group">
         <div class="colum-form-group">
         <input type="hidden" id="hiddenPiso" value="">
         <h3>Datos:</h3>
-          {# <legend>Datos</legend> #}
           <div class="row-form-group">
           <span>Tipo:</span>
           <input type="radio" id="tipoPiso" name="tipo" value="piso" checked = "true"> Piso Completo
@@ -355,14 +316,10 @@
           </div>
         </div>
           <br>
-          {# <div id="radio-group">
-
-          </div> #}
           <div class="row-form-group">
           
           <span>Ciudad:</span>      
             <select class="form-control" id="select-ciudad">
-              {# <option value="Lota">Seleccionar</option> #}
               <option value="1">Madrid</option>
               <option value="2">Barcelona</option>
               <option value="3">Valencia</option>
@@ -397,8 +354,19 @@
           <input type="checkbox" class="check-reglas" id="checkFumar"> Fumar    
           </div>
           </div>
-          {# <label for="reglas">Reglas:</label><br> #}
           
+          <br>
+          <br>
+
+          <div class="colum-form-group">
+          <h3>Ubicación:</h3>
+          
+          <div class="row-form-group">
+          Latitud: <input type="text" name="latitud" id="latitud"> 
+          Longitud:<input type="text" name="longitud" id="longitud">
+          </div>
+          </div>
+
           <br>
           <br>
           <div class="colum-form-group">
@@ -417,7 +385,7 @@
           <br>
           <div class="row-form-group">
           <span for="imagenes">Imagenes</span>
-          <input type="text" id="imagenes-input" name="imagenes" class="form-control">
+          <input type="text" id="imagenes-input" name="imagenes" class="form-control" placeholder="piso1">
           </div>
         </div>
         <button id="savePiso">Guardar</button>
@@ -439,10 +407,10 @@
             <ul>
                 <li><a href="">Sobre Nosotros</a></li>
                 <li><a href="">Trabaja con Nosotros</a></li>
-                <li><a href="">Términos y Condiciones</a></li>
+                <li><a href="https://www.iubenda.com/es/help/37616-que-son-los-terminos-y-condiciones-y-para-que-sirven?gclid=EAIaIQobChMIuqaQpb2T-AIV8hoGAB0QEwdTEAAYASAAEgIJ5PD_BwE">Términos y Condiciones</a></li>
                 <li><a href="https://protecciondatos-lopd.com/empresas/modelo-aviso-legal-web/">Aviso Legal</a></li>
-                <li><a href="">Politíca de privacidad</a></li>
-                <li><a href="">Politíca de Cookies</a></li>
+                <li><a href="https://www.aepd.es/es/politica-de-privacidad-y-aviso-legal">Politíca de privacidad</a></li>
+                <li><a href="http://www.interior.gob.es/politica-de-cookies">Politíca de Cookies</a></li>
             </ul>
             <ol>
                 <li><i class="fas fa-location-arrow"></i>Fuenlabrada,Paseo Facultades,6</li>
@@ -453,17 +421,15 @@
             </ol>
 
              <ol id="listSocial">
-                <li><i class="fab fa-instagram"></i></li>
+                <li><a href="https://www.instagram.com/domustudent"><i class="fab fa-instagram"></i></a></li>
                 <li><i class="fab fa-linkedin"></i></i></li>
-                <li><i class="fab fa-twitter"></i></li>
-                <li><i class="fab fa-facebook"></i></li>
+                <li><a href="https://twitter.com/domustudent"><i class="fab fa-twitter"></i></a></li>
+                <li><a href="https://www.facebook.com/profile.php?id=100081007001904"><i class="fab fa-facebook"></i></a></li>
                 <li><i class="fab fa-youtube"></i></li>
             </ol>
 
         </div>
 
-        {# <h3><img src="PROYECTO DOMUS/IMG/ICONOS/Copyrigth.svg" width="20px" height="15px">2022 Domus</h3> #}
-   
 
     </footer>
 
@@ -493,8 +459,6 @@
             },
         });
     </script>
-    <!-- Agregar la librería de Google Maps API -->
-{# <script src="https://maps.googleapis.com/maps/api/js"></script> #}
 
     {% endblock %}    
 
