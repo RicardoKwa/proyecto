@@ -1713,6 +1713,7 @@ function deletePiso(idPiso){
       }).then(function (text) {
           console.log(text)
           getPisosAdmin();
+          Alert.success('Piso eliminado con exito',text,{displayDuration: 6000, pos: 'top'})
       })
   }   
 }
@@ -1765,7 +1766,8 @@ event.preventDefault()
         .then(function (respuesta) {
           return respuesta.text()
       }).then(function (text) {
-          home()
+          console.log(text)
+          // getClientesAdmin()
           Alert.success('Cliente editado correctamente','Cliente Editado',{displayDuration: 6000, pos: 'top'})
       })
   }   
